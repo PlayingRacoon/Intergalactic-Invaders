@@ -4,5 +4,7 @@ module org.example.codedefender {
 
 
     opens org.example.codedefender to javafx.fxml;
-    exports org.example.codedefender;
+    exports Controller;
+    exports Module;
+    exports View;
 }
