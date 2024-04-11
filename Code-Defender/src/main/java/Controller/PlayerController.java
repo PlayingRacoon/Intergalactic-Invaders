@@ -17,15 +17,10 @@ public class PlayerController {
     private MainModule mainModule;
     private Scene primaryScene;
 
-
-
-    // movement allowance
     private boolean tempMovementW = true;
     private boolean tempMovementS = true;
-    private boolean tempMovementA = false;
-    private boolean tempMovementD = false;
-
-
+    private boolean tempMovementA = true;
+    private boolean tempMovementD = true;
 
 
     public PlayerController(Stage primaryStage, MainModule mainModule) {
@@ -41,16 +36,24 @@ public class PlayerController {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long timestamp) {
-                if (tempMovementW && wPressed) {
+
+                //Movement allowance moving only possible if set to true
+                tempMovementW = true;
+                tempMovementS = true;
+                tempMovementA = false;
+                tempMovementD = false;
+
+
+                if (wPressed && tempMovementW) {
                     mainModule.playerView.setLayoutY(mainModule.playerView.getLayoutY() - movementVariable);
                 }
-                if (tempMovementS && sPressed) {
+                if (sPressed && tempMovementS) {
                     mainModule.playerView.setLayoutY(mainModule.playerView.getLayoutY() + movementVariable);
                 }
-                if (tempMovementA && aPressed) {
+                if (aPressed && tempMovementA) {
                     mainModule.playerView.setLayoutX(mainModule.playerView.getLayoutX() - movementVariable);
                 }
-                if (tempMovementD && dPressed) {
+                if (dPressed && tempMovementD) {
                     mainModule.playerView.setLayoutX(mainModule.playerView.getLayoutX() + movementVariable);
                 }
             }
@@ -83,7 +86,6 @@ public class PlayerController {
             }
         });
 
-        // Reset temporary movement flag
         primaryScene.setOnKeyReleased(e -> {
             if (e.getCode() == KeyCode.W) {
                 wPressed = false;
