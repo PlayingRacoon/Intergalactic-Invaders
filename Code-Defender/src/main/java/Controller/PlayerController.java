@@ -2,83 +2,104 @@ package Controller;
 
 import Module.MainModule;
 import javafx.animation.AnimationTimer;
-import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 public class PlayerController {
-    private BooleanProperty wPressed = new SimpleBooleanProperty();
-    private BooleanProperty sPressed = new SimpleBooleanProperty();
+    private boolean wPressed = false;
+    private boolean sPressed = false;
+    private boolean aPressed = false;
+    private boolean dPressed = false;
 
-    private BooleanBinding keyPressed = wPressed.or(sPressed);
+    private int movementVariable = 4; //movement speed
 
-    private int movementVariable = 2;
-
-    private Stage primaryStage;
     private MainModule mainModule;
+    private Scene primaryScene;
 
-    public PlayerController(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-        this.mainModule = new MainModule();
-        initialize(null, null);
+
+
+    // movement allowance
+    private boolean tempMovementW = true;
+    private boolean tempMovementS = true;
+    private boolean tempMovementA = false;
+    private boolean tempMovementD = false;
+
+
+
+
+    public PlayerController(Stage primaryStage, MainModule mainModule) {
+        this.mainModule = mainModule;
+        this.primaryScene = primaryStage.getScene();
+        initialize();
     }
 
     public void start() {
-        mainModule.playerView.setLayoutY(500);
-        mainModule.playerView.setLayoutX(200);
+        mainModule.playerView.setLayoutY(240);
+        mainModule.playerView.setLayoutX(0);
+
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long timestamp) {
+                if (tempMovementW && wPressed) {
+                    mainModule.playerView.setLayoutY(mainModule.playerView.getLayoutY() - movementVariable);
+                }
+                if (tempMovementS && sPressed) {
+                    mainModule.playerView.setLayoutY(mainModule.playerView.getLayoutY() + movementVariable);
+                }
+                if (tempMovementA && aPressed) {
+                    mainModule.playerView.setLayoutX(mainModule.playerView.getLayoutX() - movementVariable);
+                }
+                if (tempMovementD && dPressed) {
+                    mainModule.playerView.setLayoutX(mainModule.playerView.getLayoutX() + movementVariable);
+                }
+            }
+        };
+        timer.start();
     }
 
-    AnimationTimer timer = new AnimationTimer() {
-        @Override
-        public void handle(long timestamp) {
-            if(wPressed.get()) {
-                mainModule.playerView.setLayoutY(mainModule.playerView.getLayoutY() - movementVariable);
-            }
-
-            if(sPressed.get()){
-                mainModule.playerView.setLayoutY(mainModule.playerView.getLayoutY() + movementVariable);
-            }
-        }
-    };
-
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    private void initialize() {
         movementSetup();
-
-        keyPressed.addListener(((observableValue, aBoolean, t1) -> {
-            if(!aBoolean){
-                timer.start();
-            } else {
-                timer.stop();
-            }
-        }));
     }
 
-    public void movementSetup() {
-        Scene primaryScene = primaryStage.getScene();
+    // Set temporary movement flag
+    private void movementSetup() {
         primaryScene.setOnKeyPressed(e -> {
-            if(e.getCode() == KeyCode.W) {
-                wPressed.set(true);
+            if (e.getCode() == KeyCode.W) {
+                wPressed = true;
+                tempMovementW = true;
             }
-
-            if(e.getCode() == KeyCode.S) {
-                sPressed.set(true);
+            if (e.getCode() == KeyCode.S) {
+                sPressed = true;
+                tempMovementS = true;
             }
-
+            if (e.getCode() == KeyCode.A) {
+                aPressed = true;
+                tempMovementA = true;
+            }
+            if (e.getCode() == KeyCode.D) {
+                dPressed = true;
+                tempMovementD = true;
+            }
         });
 
-        primaryScene.setOnKeyReleased(e ->{
-            if(e.getCode() == KeyCode.W) {
-                wPressed.set(false);
+        // Reset temporary movement flag
+        primaryScene.setOnKeyReleased(e -> {
+            if (e.getCode() == KeyCode.W) {
+                wPressed = false;
+                tempMovementW = false;
             }
-
-            if(e.getCode() == KeyCode.S) {
-                sPressed.set(false);
+            if (e.getCode() == KeyCode.S) {
+                sPressed = false;
+                tempMovementS = false;
+            }
+            if (e.getCode() == KeyCode.A) {
+                aPressed = false;
+                tempMovementA = false;
+            }
+            if (e.getCode() == KeyCode.D) {
+                dPressed = false;
+                tempMovementD = false;
             }
         });
     }
