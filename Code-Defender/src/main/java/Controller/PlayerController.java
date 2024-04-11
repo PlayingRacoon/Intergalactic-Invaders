@@ -37,7 +37,7 @@ public class PlayerController {
 
     public void start() {
         mainModule.playerView.setLayoutY(240);
-        mainModule.playerView.setLayoutX(0);
+        mainModule.playerView.setLayoutX(-3);
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
