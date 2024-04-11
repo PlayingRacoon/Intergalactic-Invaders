@@ -13,14 +13,21 @@ public class Screen extends Application {
     @Override
     public void start(Stage mainStage) throws Exception {
         mainStage.setTitle("Code Defender");
-        mainStage.setScene(new Scene(root, 1024, 576));
-        mainStage.show();
 
         MainModule mainModule = new MainModule();
         root.getChildren().add(mainModule.playerView);
         mainModule.playerView.setFitHeight(60);
         mainModule.playerView.setFitWidth(60);
 
+        Scene scene = new Scene(root, 1024, 576);
+        mainStage.setScene(scene);
+
+        // Set the stage to fullscreen mode
+        mainStage.setFullScreen(true);
+
+        mainStage.show();
+
+        // Initialize PlayerController after scene creation
         PlayerController playerController = new PlayerController(mainStage, mainModule);
         playerController.start();
     }
