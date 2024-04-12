@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +43,8 @@ public class MainModule {
                     System.err.println("Error: Invalid format in " + ENEMY_FILE_PATH);
                 }
             }
-            enemyImage = "/graphics/png/" + enemyData.getOrDefault("/image", "");
+            String enemyImageName = enemyData.getOrDefault("/image", "");
+            enemyImage = "/graphics/png/" + enemyImageName;
             enemyType = enemyData.getOrDefault("/type", "");
             enemySpeed = Double.parseDouble(enemyData.getOrDefault("/speed", "0.0"));
             enemyDamage = Integer.parseInt(enemyData.getOrDefault("/damage", "0"));
@@ -52,5 +52,4 @@ public class MainModule {
             e.printStackTrace();
         }
     }
-
 }

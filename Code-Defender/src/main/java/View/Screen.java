@@ -16,6 +16,8 @@ public class Screen extends Application {
 
         MainModule mainModule = new MainModule();
         root.getChildren().add(mainModule.playerView);
+        root.getChildren().add(mainModule.enemyView);
+
         mainModule.playerView.setFitHeight(60);
         mainModule.playerView.setFitWidth(60);
 
