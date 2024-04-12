@@ -1,0 +1,4 @@
+/image:enemy1.png
+/type:basic
+/speed:5
+/damage:20
