@@ -1,0 +1,4 @@
+Asteroids come in various sizes from 80x80 to just 50x50
+
+while aliens can fight in either ships 50x50 -> 75x75 or even 100 or 120 for bosses (mother ships)
+they can also fight withour ships 25x25
