@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class PlayerController {
     private boolean wPressed = false;
     private boolean sPressed = false;
@@ -64,7 +66,8 @@ public class PlayerController {
     }
 
     private void initializeEnemy() {
-        enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage);
+        //maybe use arrayList to create and edit or clear multiple enemies
+        enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage, mainModule.enemyHitpoints);
         enemyX = sceneWidth; // Start enemy on the right side
         enemyY = 240; // Adjust as needed
         mainModule.enemyView.setLayoutX(enemyX);

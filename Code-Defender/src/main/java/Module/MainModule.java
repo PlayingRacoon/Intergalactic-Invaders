@@ -25,9 +25,10 @@ public class MainModule {
 
 
     private String enemyImage;
-    private String enemyType;
+    public String enemyType;
     public double enemySpeed;
     public int enemyDamage;
+    public int enemyHitpoints;
 
     private static final String ENEMY_FILE_PATH = "enemies.txt";
 
@@ -48,6 +49,7 @@ public class MainModule {
             enemyType = enemyData.getOrDefault("/type", "");
             enemySpeed = Double.parseDouble(enemyData.getOrDefault("/speed", "0.0"));
             enemyDamage = Integer.parseInt(enemyData.getOrDefault("/damage", "0"));
+            enemyHitpoints = Integer.parseInt(enemyData.getOrDefault("/hitpoints","0"));
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }

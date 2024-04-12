@@ -8,7 +8,7 @@ public class Enemy {
     private double speed;
     private int damage;
 
-    public Enemy(Image image, double speed, int damage) {
+    public Enemy(Image image, double speed, int damage, int enemyHitpoints) {
         imageView = new ImageView(image);
         this.speed = speed;
         this.damage = damage;

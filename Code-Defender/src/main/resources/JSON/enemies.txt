@@ -1,4 +1,5 @@
-/image:enemy1.png
+/image:enemy1.gif
 /type:basic
 /speed:1
 /damage:20
+/hitpoints:1
