@@ -1,6 +1,7 @@
 package Controller;
 
 import Module.MainModule;
+import Module.Enemy;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -12,14 +13,20 @@ public class PlayerController {
     private boolean aPressed = false;
     private boolean dPressed = false;
 
+    // Enemy
+    private Enemy enemy;
+    private double enemyX;
+    private double enemyY;
 
-    //movement allowance
-    boolean tempMovementW = true; //up
-    boolean tempMovementS = true; //down
-    boolean tempMovementA = false; //left
-    boolean tempMovementD = false; //right
+    // Movement allowance
+    // (Assuming tempMovementW, tempMovementS, tempMovementA, tempMovementD
+    // control player movement only)
+    private boolean tempMovementW = true; // Up
+    private boolean tempMovementS = true; // Down
+    private boolean tempMovementA = false; // Left
+    private boolean tempMovementD = false; // Right
 
-    private int movementVariable = 5; //movement speed
+    private int movementVariable = 3; // Movement speed
 
     private MainModule mainModule;
     private Scene primaryScene;
@@ -32,8 +39,8 @@ public class PlayerController {
         this.primaryScene = primaryStage.getScene();
         updateSceneSize();
         initialize();
+        initializeEnemy();
     }
-
 
     public void start() {
         mainModule.playerView.setLayoutY(240);
@@ -43,6 +50,7 @@ public class PlayerController {
             @Override
             public void handle(long timestamp) {
                 movePlayer();
+                moveEnemy();
             }
         };
         timer.start();
@@ -53,6 +61,14 @@ public class PlayerController {
         // Add listeners to scene width and height properties to update scene size
         primaryScene.widthProperty().addListener((obs, oldVal, newVal) -> updateSceneSize());
         primaryScene.heightProperty().addListener((obs, oldVal, newVal) -> updateSceneSize());
+    }
+
+    private void initializeEnemy() {
+        enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage);
+        enemyX = sceneWidth; // Start enemy on the right side
+        enemyY = 240; // Adjust as needed
+        mainModule.enemyView.setLayoutX(enemyX);
+        mainModule.enemyView.setLayoutY(enemyY);
     }
 
     private void updateSceneSize() {
@@ -81,8 +97,23 @@ public class PlayerController {
         mainModule.playerView.setLayoutY(newY);
     }
 
+    private void moveEnemy() {
+        double newX = enemyX;
+        double newY = enemyY;
 
-    //setup for movement, DO NOT CHANGE!
+        // Move enemy towards left
+        newX -= enemy.getSpeed();
+        mainModule.enemyView.setLayoutX(newX);
+        enemyX = newX;
+
+        // Check for collisions with player (assuming player is a rectangle)
+        if (mainModule.playerView.getBoundsInParent().intersects(mainModule.enemyView.getBoundsInParent())) {
+            // Handle collision
+            System.out.println("Enemy collided with player!");
+        }
+    }
+
+    // Setup for movement, DO NOT CHANGE!
     private void movementSetup() {
         primaryScene.setOnKeyPressed(e -> {
             KeyCode code = e.getCode();
