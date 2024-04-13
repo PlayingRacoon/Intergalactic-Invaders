@@ -13,7 +13,7 @@ public class MainModule {
     public ImageView playerView;
     public ImageView enemyView;
 
-    public int chosenEnemy = 2; // Default chosen enemy number
+    public int chosenEnemy = 5; //number of the enemy that gets chosen from 1 to ....
 
     public MainModule() {
         playerView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/SpaceShip.gif")));
@@ -72,7 +72,7 @@ public class MainModule {
             // Check if the chosen enemy exists in the loaded data
             if (allEnemiesData.containsKey(chosenEnemy)) {
                 Map<String, String> chosenEnemyData = allEnemiesData.get(chosenEnemy);
-                enemyImage = "/graphics/png/" + chosenEnemyData.getOrDefault("/image", "");
+                enemyImage = "/graphics/png/enemies/" + chosenEnemyData.getOrDefault("/image", "");
                 enemyType = chosenEnemyData.getOrDefault("/type", "");
                 enemySpeed = Double.parseDouble(chosenEnemyData.getOrDefault("/speed", "0.0"));
                 enemyDamage = Integer.parseInt(chosenEnemyData.getOrDefault("/damage", "0"));

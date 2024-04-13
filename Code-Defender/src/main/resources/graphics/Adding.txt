@@ -6,10 +6,14 @@ they can also fight withour ships 25x25
 
 enemy types:
 
-melee ####
-ranged
 spawner 
 mother ship (multiple lifes) 
 speeders (speeding at you)
 catapults (using asteroids)
 healer
+armor
+fake asteroids
+tenet
+
+Wegen fähigkeiten überlegen wir uns noch, aber ich würd mal sagen fix sowas wie ein speedboost und ein cloak(da kann ich das visuell dann durchs bluren von nem character anzeigen lassen).
+Und viellecht auch sowas wie mercenaries also shiffe die dir helfen und so
