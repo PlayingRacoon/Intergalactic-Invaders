@@ -28,7 +28,7 @@ public class PlayerController {
     private boolean tempMovementA = false; // Left
     private boolean tempMovementD = false; // Right
 
-    private int movementVariable = 3; // Movement speed
+    private int movementVariable = 4; // Movement speed
 
     private MainModule mainModule;
     private Scene primaryScene;
@@ -67,7 +67,7 @@ public class PlayerController {
 
     private void initializeEnemy() {
         //maybe use arrayList to create and edit or clear multiple enemies
-        enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage, mainModule.enemyHitpoints);
+        enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage, mainModule.enemyHitpoints,mainModule.chosenEnemy);
         enemyX = sceneWidth; // Start enemy on the right side
         enemyY = 240; // Adjust as needed
         mainModule.enemyView.setLayoutX(enemyX);
