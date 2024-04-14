@@ -7,11 +7,9 @@ they can also fight withour ships 25x25
 enemy types:
 
 spawner 
-mother ship (multiple lifes) 
-speeders (speeding at you)
+mother ship (multiple lifes)
 catapults (using asteroids)
 healer
-armor
 fake asteroids
 tenet
 

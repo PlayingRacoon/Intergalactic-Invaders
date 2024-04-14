@@ -13,7 +13,7 @@ public class MainModule {
     public ImageView playerView;
     public ImageView enemyView;
 
-    public int chosenEnemy = 5; //number of the enemy that gets chosen from 1 to ....
+    public int chosenEnemy = 6; //number of the enemy that gets chosen from 1 to ....
 
     public MainModule() {
         playerView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/SpaceShip.gif")));

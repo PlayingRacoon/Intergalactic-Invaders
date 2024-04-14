@@ -32,5 +32,13 @@
 /damage:0
 /hitpoints:3
 /number:5
+++++
+/image:speedster.gif
+/type:ship
+/speed:4
+/damage:0
+/hitpoints:3
+/number:6
+
 
 
