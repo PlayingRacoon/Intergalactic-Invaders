@@ -71,7 +71,6 @@ public class Spawner {
         enemyMovement.start();
     }
 
-    // Method to get the list of enemy ImageViews
     public List<ImageView> getEnemyViews() {
         return enemyViews;
     }

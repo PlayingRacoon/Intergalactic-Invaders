@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import Module.Spawner;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class PlayerController {
@@ -36,12 +37,13 @@ private Pane root;
     private Spawner spawner;
 
     // Constructor
-    public PlayerController(Stage primaryStage, MainModule mainModule, Spawner spawner) {
+    public PlayerController(Stage primaryStage, MainModule mainModule, Spawner spawner, Pane root) {
         this.mainModule = mainModule;
         this.primaryScene = primaryStage.getScene();
         this.spawner = spawner;
         updateSceneSize();
         initialize();
+        this.root = root;
     }
 
     // Setter method for Spawner
@@ -107,7 +109,9 @@ private Pane root;
     }
 
     private void moveEnemies() {
-        for (Enemy enemy : enemies) {
+        Iterator<Enemy> iterator = enemies.iterator();
+        while (iterator.hasNext()) {
+            Enemy enemy = iterator.next();
             ImageView enemyView = enemy.getImageView();
             double newX = enemyView.getLayoutX() - 1; // Adjust speed as needed
             double newY = enemyView.getLayoutY(); // Keep Y position unchanged
@@ -119,19 +123,42 @@ private Pane root;
             // Check for collisions with player (assuming player is a rectangle)
             List<ImageView> enemyViews = spawner.getEnemyViews();
 
-            collisionsCheck(enemyViews);
+            collisionsCheck(enemyViews, enemyView, iterator);
         }
     }
 
-    public void collisionsCheck(List<ImageView> enemyViews) {
+
+    public void collisionsCheck(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator) {
         for (ImageView enemyV : enemyViews) {
             if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+
+                System.out.println("Checking collisions...");
+                System.out.println("Player bounds: " + mainModule.playerView.getBoundsInParent());
+                System.out.println("Enemy bounds: " + enemyView.getBoundsInParent());
+
+
                 // Handle collision between player and current enemy
                 System.out.println("Player collided with an enemy!");
+                iterator.remove();
+
+                root.getChildren().remove(enemyView);
+                root.getChildren().remove(enemyV);
+
+                enemyViews.remove(enemyView);
+                enemyViews.remove(enemyV);
+
+                spawner.getEnemyViews().remove(enemyV);
+                spawner.getEnemyViews().remove(enemyView);
+
                 enemies.remove(enemyV);
+                enemies.remove(enemyView);
+                break;
             }
         }
     }
+
+
+
 
     // Setup for movement, DO NOT CHANGE!
     private void movementSetup() {

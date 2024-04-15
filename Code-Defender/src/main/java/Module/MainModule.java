@@ -80,6 +80,7 @@ public class MainModule {
                 enemySpeed = Double.parseDouble(chosenEnemyData.getOrDefault("/speed", "0.0"));
                 enemyDamage = Integer.parseInt(chosenEnemyData.getOrDefault("/damage", "0"));
                 enemyHitpoints = Integer.parseInt(chosenEnemyData.getOrDefault("/hitpoints", "0"));
+
             } else {
                 System.err.println("Error: Chosen enemy number not found.");
             }

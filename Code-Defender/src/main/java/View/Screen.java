@@ -31,7 +31,7 @@ public class Screen extends Application {
 
         // Initialize Spawner before PlayerController
         // Initialize PlayerController after scene creation
-        PlayerController playerController = new PlayerController(mainStage, mainModule, null);
+        PlayerController playerController = new PlayerController(mainStage, mainModule, null, root);
         playerController.start();
 
 // Initialize and start the Spawner after PlayerController initialization
