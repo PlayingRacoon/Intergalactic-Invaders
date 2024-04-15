@@ -29,16 +29,31 @@ public class Screen extends Application {
 
         mainStage.show();
 
+        // Initialize Spawner before PlayerController
         // Initialize PlayerController after scene creation
-        PlayerController playerController = new PlayerController(mainStage, mainModule);
+        PlayerController playerController = new PlayerController(mainStage, mainModule, null);
         playerController.start();
 
-        // Initialize and start the Spawner after PlayerController initialization
+// Initialize and start the Spawner after PlayerController initialization
         Spawner spawner = new Spawner(mainStage, root, mainModule, playerController);
+        playerController.setSpawner(spawner); // Set the Spawner instance
+        playerController.start();
+
+
+        // Initialize PlayerController after scene creation
+
+        spawner.setPlayerController(playerController);
+
+        
         spawner.startSpawning();
+        playerController.start();
     }
+
+
 
     public static void main(String[] args) {
         launch();
     }
 }
+
+

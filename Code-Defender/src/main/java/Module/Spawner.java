@@ -5,8 +5,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import Controller.PlayerController;
-import Module.MainModule;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,5 +74,10 @@ public class Spawner {
     // Method to get the list of enemy ImageViews
     public List<ImageView> getEnemyViews() {
         return enemyViews;
+    }
+
+    // Method to set the PlayerController instance
+    public void setPlayerController(PlayerController playerController) {
+        this.playerController = playerController;
     }
 }

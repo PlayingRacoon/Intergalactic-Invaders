@@ -29,22 +29,28 @@ public class PlayerController {
 
     private MainModule mainModule;
     private Scene primaryScene;
-    Spawner spawner;
-
     private double sceneWidth;
     private double sceneHeight;
 
-    public PlayerController(Stage primaryStage, MainModule mainModule) {
+    private Spawner spawner;
+
+    // Constructor
+    public PlayerController(Stage primaryStage, MainModule mainModule, Spawner spawner) {
         this.mainModule = mainModule;
         this.primaryScene = primaryStage.getScene();
+        this.spawner = spawner;
         updateSceneSize();
         initialize();
     }
 
+    // Setter method for Spawner
+    public void setSpawner(Spawner spawner) {
+        this.spawner = spawner;
+    }
     public void initializeEnemy(ImageView enemyView, double enemyX, double enemyY) {
         // Create and initialize the enemy
         Enemy enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage, mainModule.enemyHitpoints, mainModule.chosenEnemy);
-
+        enemies.add(enemy); //ertejzuuiluikjtthtzjhtzjhth
         // Set the layout coordinates for the enemy's ImageView
         enemyView.setLayoutX(enemyX);
         enemyView.setLayoutY(enemyY);
