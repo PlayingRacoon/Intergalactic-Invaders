@@ -87,15 +87,15 @@ public class MainModule {
     }
 
     private void initializeEnemy(double stageWidth, double stageHeight) {
-        // Calculate the initial position of the enemy
-        double enemyX = stageWidth; // Start enemy on the right side
-        double enemyY = Math.max(0, Math.min(stageHeight - enemyView.getBoundsInParent().getHeight(), 240)); // Ensure enemyY is within reasonable bounds
+        // Calculate the initial Y position of the enemy within reasonable bounds
+        double enemyY = Math.max(0, Math.min(stageHeight - enemyView.getBoundsInParent().getHeight(), 240));
 
-        // Create and initialize the enemy only if its position is within reasonable bounds
-        if (enemyY >= 0 && enemyY <= stageHeight - enemyView.getBoundsInParent().getHeight()) {
-            enemy = new Enemy(enemyView.getImage(), enemySpeed, enemyDamage, enemyHitpoints, chosenEnemy);
-            enemyView.setLayoutX(enemyX);
-            enemyView.setLayoutY(enemyY);
-        }
+        // Set the initial X position of the enemy to the right edge of the screen
+        double enemyX = stageWidth - enemyView.getBoundsInParent().getWidth();
+
+        // Create and initialize the enemy
+        enemy = new Enemy(enemyView.getImage(), enemySpeed, enemyDamage, enemyHitpoints, chosenEnemy);
+        enemyView.setLayoutX(enemyX);
+        enemyView.setLayoutY(enemyY);
     }
 }

@@ -17,7 +17,6 @@ public class Screen extends Application {
 
         MainModule mainModule = new MainModule(mainStage.getWidth(), mainStage.getHeight()); // Pass stage dimensions
         root.getChildren().add(mainModule.playerView);
-        root.getChildren().add(mainModule.enemyView); //eterzrthgrtdrtzgdrtzdtrhg
 
         mainModule.playerView.setFitHeight(60);
         mainModule.playerView.setFitWidth(60);

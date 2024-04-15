@@ -41,7 +41,6 @@ public class PlayerController {
     public void initializeEnemy(ImageView enemyView, double enemyX, double enemyY) {
         // Create and initialize the enemy
         Enemy enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage, mainModule.enemyHitpoints, mainModule.chosenEnemy);
-        enemies.add(enemy); // Add enemy to ArrayList
 
         // Set the layout coordinates for the enemy's ImageView
         enemyView.setLayoutX(enemyX);
