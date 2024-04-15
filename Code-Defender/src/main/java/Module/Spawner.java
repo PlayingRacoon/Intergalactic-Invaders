@@ -14,7 +14,7 @@ public class Spawner {
     private Stage primaryStage;
     private PlayerController playerController;
 
-    private int spawnTime = 5; // Initial spawn time in seconds
+    private int spawnTime = 10; // Initial spawn time in 5 seconds
     private long lastSpawnTime = 0;
 
     private ArrayList<ImageView> enemyViews = new ArrayList<>(); // Track enemy ImageViews

@@ -25,7 +25,7 @@ public class PlayerController {
 
     private ArrayList<Enemy> enemies = new ArrayList<>(); // ArrayList to hold Enemy objects
 
-    private int movementVariable = 5; // Movement speed
+    private int movementVariable = 2; // Movement speed
 
     private MainModule mainModule;
     private Scene primaryScene;
@@ -50,7 +50,7 @@ public class PlayerController {
     public void initializeEnemy(ImageView enemyView, double enemyX, double enemyY) {
         // Create and initialize the enemy
         Enemy enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage, mainModule.enemyHitpoints, mainModule.chosenEnemy);
-        enemies.add(enemy); //ertejzuuiluikjtthtzjhtzjhth
+        enemies.add(enemy);
         // Set the layout coordinates for the enemy's ImageView
         enemyView.setLayoutX(enemyX);
         enemyView.setLayoutY(enemyY);
