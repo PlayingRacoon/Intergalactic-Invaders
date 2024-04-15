@@ -5,6 +5,7 @@ import Module.MainModule;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 import Module.Spawner;
@@ -31,7 +32,7 @@ public class PlayerController {
     private Scene primaryScene;
     private double sceneWidth;
     private double sceneHeight;
-
+private Pane root;
     private Spawner spawner;
 
     // Constructor
@@ -117,13 +118,18 @@ public class PlayerController {
 
             // Check for collisions with player (assuming player is a rectangle)
             List<ImageView> enemyViews = spawner.getEnemyViews();
-            for (ImageView enemyV : enemyViews) {
-                if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
-                    // Handle collision between player and current enemy
-                    System.out.println("Player collided with an enemy!");
-                }
-            }
 
+            collisionsCheck(enemyViews);
+        }
+    }
+
+    public void collisionsCheck(List<ImageView> enemyViews) {
+        for (ImageView enemyV : enemyViews) {
+            if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+                // Handle collision between player and current enemy
+                System.out.println("Player collided with an enemy!");
+                enemies.remove(enemyV);
+            }
         }
     }
 

@@ -15,3 +15,32 @@ tenet
 
 Wegen fähigkeiten überlegen wir uns noch, aber ich würd mal sagen fix sowas wie ein speedboost und ein cloak(da kann ich das visuell dann durchs bluren von nem character anzeigen lassen).
 Und viellecht auch sowas wie mercenaries also shiffe die dir helfen und so
+
+
+
+private void moveEnemies() {
+    Iterator<Enemy> iterator = enemies.iterator();
+    while (iterator.hasNext()) {
+        Enemy enemy = iterator.next();
+        ImageView enemyView = enemy.getImageView();
+        double newX = enemyView.getLayoutX() - 1; // Adjust speed as needed
+        double newY = enemyView.getLayoutY(); // Keep Y position unchanged
+
+        // Update the layout coordinates for the enemy's ImageView
+        enemyView.setLayoutX(newX);
+        enemyView.setLayoutY(newY);
+
+        // Check for collisions with player
+        if (mainModule.playerView.getBoundsInParent().intersects(enemyView.getBoundsInParent())) {
+            handleCollision(enemy); // Remove the enemy on collision
+            iterator.remove(); // Remove the enemy from the list
+            System.out.println("Player collided with an enemy!");
+        }
+
+        // Check if enemy is beyond the left side
+        if (newX + enemyView.getBoundsInParent().getWidth() < 0) {
+            iterator.remove(); // Remove the enemy from the list
+            root.getChildren().remove(enemyView); // Remove the enemy's ImageView from the scene
+        }
+    }
+}
