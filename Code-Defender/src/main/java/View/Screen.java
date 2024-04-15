@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import Controller.PlayerController;
 import Module.MainModule;
+import Module.Spawner;
 
 public class Screen extends Application {
     AnchorPane root = new AnchorPane();
@@ -14,9 +15,9 @@ public class Screen extends Application {
     public void start(Stage mainStage) throws Exception {
         mainStage.setTitle("Code Defender");
 
-        MainModule mainModule = new MainModule();
+        MainModule mainModule = new MainModule(mainStage.getWidth(), mainStage.getHeight()); // Pass stage dimensions
         root.getChildren().add(mainModule.playerView);
-        root.getChildren().add(mainModule.enemyView);
+        root.getChildren().add(mainModule.enemyView); //eterzrthgrtdrtzgdrtzdtrhg
 
         mainModule.playerView.setFitHeight(60);
         mainModule.playerView.setFitWidth(60);
@@ -32,6 +33,10 @@ public class Screen extends Application {
         // Initialize PlayerController after scene creation
         PlayerController playerController = new PlayerController(mainStage, mainModule);
         playerController.start();
+
+        // Initialize and start the Spawner after PlayerController initialization
+        Spawner spawner = new Spawner(mainStage, root, mainModule, playerController);
+        spawner.startSpawning();
     }
 
     public static void main(String[] args) {

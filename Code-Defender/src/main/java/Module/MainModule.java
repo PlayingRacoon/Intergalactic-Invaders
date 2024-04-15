@@ -10,14 +10,16 @@ import java.util.Map;
 public class MainModule {
     public ImageView playerView;
     public ImageView enemyView;
+    private Enemy enemy; // Assuming Enemy class exists
 
-    public int chosenEnemy = 6; //number of the enemy that gets chosen from 1 to ....
+    public int chosenEnemy = 5; // number of the enemy that gets chosen from 1 to ....
 
-    public MainModule() {
+    public MainModule(double stageWidth, double stageHeight) {
         playerView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/player/SpaceShip.gif")));
         loadEnemyAttributes();
         if (enemyImage != null) {
             enemyView = new ImageView(new Image(getClass().getResourceAsStream(enemyImage)));
+            initializeEnemy(stageWidth, stageHeight); // Initialize enemy only if its position is within reasonable bounds
         } else {
             System.err.println("Error: enemyImage is null. Check if loadEnemyAttributes() is properly executed.");
         }
@@ -81,6 +83,19 @@ public class MainModule {
             }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void initializeEnemy(double stageWidth, double stageHeight) {
+        // Calculate the initial position of the enemy
+        double enemyX = stageWidth; // Start enemy on the right side
+        double enemyY = Math.max(0, Math.min(stageHeight - enemyView.getBoundsInParent().getHeight(), 240)); // Ensure enemyY is within reasonable bounds
+
+        // Create and initialize the enemy only if its position is within reasonable bounds
+        if (enemyY >= 0 && enemyY <= stageHeight - enemyView.getBoundsInParent().getHeight()) {
+            enemy = new Enemy(enemyView.getImage(), enemySpeed, enemyDamage, enemyHitpoints, chosenEnemy);
+            enemyView.setLayoutX(enemyX);
+            enemyView.setLayoutY(enemyY);
         }
     }
 }
