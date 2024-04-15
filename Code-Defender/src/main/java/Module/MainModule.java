@@ -14,7 +14,7 @@ public class MainModule {
     public int chosenEnemy = 6; //number of the enemy that gets chosen from 1 to ....
 
     public MainModule() {
-        playerView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/SpaceShip.gif")));
+        playerView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/player/SpaceShip.gif")));
         loadEnemyAttributes();
         if (enemyImage != null) {
             enemyView = new ImageView(new Image(getClass().getResourceAsStream(enemyImage)));

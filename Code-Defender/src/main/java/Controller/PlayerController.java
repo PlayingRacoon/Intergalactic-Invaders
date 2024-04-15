@@ -28,7 +28,7 @@ public class PlayerController {
     private boolean tempMovementA = false; // Left
     private boolean tempMovementD = false; // Right
 
-    private int movementVariable = 4; // Movement speed
+    private int movementVariable = 6; // Movement speed
 
     private MainModule mainModule;
     private Scene primaryScene;
