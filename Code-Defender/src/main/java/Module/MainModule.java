@@ -12,6 +12,8 @@ public class MainModule {
     public ImageView enemyView;
     private Enemy enemy; // Assuming Enemy class exists
 
+
+
     public int chosenEnemy = 5; // number of the enemy that gets chosen from 1 to ....
 
     public MainModule(double stageWidth, double stageHeight) {

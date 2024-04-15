@@ -8,6 +8,7 @@ import Controller.PlayerController;
 import Module.MainModule;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Spawner {
     private Pane root;
@@ -73,7 +74,7 @@ public class Spawner {
     }
 
     // Method to get the list of enemy ImageViews
-    public ArrayList<ImageView> getEnemyViews() {
+    public List<ImageView> getEnemyViews() {
         return enemyViews;
     }
 }

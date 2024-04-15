@@ -7,8 +7,10 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
+import Module.Spawner;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayerController {
     private boolean wPressed = false;
@@ -23,10 +25,11 @@ public class PlayerController {
 
     private ArrayList<Enemy> enemies = new ArrayList<>(); // ArrayList to hold Enemy objects
 
-    private int movementVariable = 6; // Movement speed
+    private int movementVariable = 5; // Movement speed
 
     private MainModule mainModule;
     private Scene primaryScene;
+    Spawner spawner;
 
     private double sceneWidth;
     private double sceneHeight;
@@ -107,10 +110,14 @@ public class PlayerController {
             enemyView.setLayoutY(newY);
 
             // Check for collisions with player (assuming player is a rectangle)
-            if (mainModule.playerView.getBoundsInParent().intersects(enemyView.getBoundsInParent())) {
-                // Handle collision
-                System.out.println("Enemy collided with player!");
+            List<ImageView> enemyViews = spawner.getEnemyViews();
+            for (ImageView enemyV : enemyViews) {
+                if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+                    // Handle collision between player and current enemy
+                    System.out.println("Player collided with an enemy!");
+                }
             }
+
         }
     }
 
