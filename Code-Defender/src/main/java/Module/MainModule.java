@@ -10,14 +10,18 @@ import java.util.Map;
 public class MainModule {
     public ImageView playerView;
     public ImageView enemyView;
+    private Enemy enemy; // Assuming Enemy class exists
 
-    public int chosenEnemy = 6; //number of the enemy that gets chosen from 1 to ....
 
-    public MainModule() {
+
+    public int chosenEnemy = 5; // number of the enemy that gets chosen from 1 to ....
+
+    public MainModule(double stageWidth, double stageHeight) {
         playerView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/player/SpaceShip.gif")));
         loadEnemyAttributes();
         if (enemyImage != null) {
             enemyView = new ImageView(new Image(getClass().getResourceAsStream(enemyImage)));
+            initializeEnemy(stageWidth, stageHeight); // Initialize enemy only if its position is within reasonable bounds
         } else {
             System.err.println("Error: enemyImage is null. Check if loadEnemyAttributes() is properly executed.");
         }
@@ -76,11 +80,25 @@ public class MainModule {
                 enemySpeed = Double.parseDouble(chosenEnemyData.getOrDefault("/speed", "0.0"));
                 enemyDamage = Integer.parseInt(chosenEnemyData.getOrDefault("/damage", "0"));
                 enemyHitpoints = Integer.parseInt(chosenEnemyData.getOrDefault("/hitpoints", "0"));
+
             } else {
                 System.err.println("Error: Chosen enemy number not found.");
             }
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initializeEnemy(double stageWidth, double stageHeight) {
+        // Calculate the initial Y position of the enemy within reasonable bounds
+        double enemyY = Math.max(0, Math.min(stageHeight - enemyView.getBoundsInParent().getHeight(), 240));
+
+        // Set the initial X position of the enemy to the right edge of the screen
+        double enemyX = stageWidth - enemyView.getBoundsInParent().getWidth();
+
+        // Create and initialize the enemy
+        enemy = new Enemy(enemyView.getImage(), enemySpeed, enemyDamage, enemyHitpoints, chosenEnemy);
+        enemyView.setLayoutX(enemyX);
+        enemyView.setLayoutY(enemyY);
     }
 }
