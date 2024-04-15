@@ -2,6 +2,7 @@ package Controller;
 
 import Module.MainModule;
 import Module.Enemy;
+import Module.Laser;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -19,6 +20,12 @@ public class PlayerController {
     private Enemy enemy;
     private double enemyX;
     private double enemyY;
+
+    // Laser
+
+    private Laser laser;
+    private double laserX;
+    private double laserY;
 
     // Movement allowance
     // (Assuming tempMovementW, tempMovementS, tempMovementA, tempMovementD
@@ -48,6 +55,12 @@ public class PlayerController {
         mainModule.playerView.setLayoutY(240);
         mainModule.playerView.setLayoutX(-3);
 
+        primaryScene.setOnKeyPressed(event ->{
+            if(event.getCode()==KeyCode.SPACE){
+                initializeLaser();
+            }
+        });
+
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long timestamp) {
@@ -63,6 +76,11 @@ public class PlayerController {
         // Add listeners to scene width and height properties to update scene size
         primaryScene.widthProperty().addListener((obs, oldVal, newVal) -> updateSceneSize());
         primaryScene.heightProperty().addListener((obs, oldVal, newVal) -> updateSceneSize());
+        primaryScene.setOnKeyPressed(event ->{
+            if(event.getCode()==KeyCode.SPACE){
+                initializeLaser();
+            }
+        });
     }
 
     private void initializeEnemy() {
@@ -133,5 +151,15 @@ public class PlayerController {
             else if (code == KeyCode.A) aPressed = false;
             else if (code == KeyCode.D) dPressed = false;
         });
+    }
+
+    // Shooting Laser for Player
+    private void initializeLaser() {
+        //maybe use arrayList to create and edit or clear multiple enemies
+        laser = new Laser(mainModule.laserView.getImage(), mainModule.laserSpeed, mainModule.laserDamage,mainModule.chosenLaser);
+        laserX = mainModule.playerView.getLayoutX();//spawn laser on player
+        laserY = mainModule.playerView.getLayoutY();
+        mainModule.laserView.setLayoutX(laserX);
+        mainModule.laserView.setLayoutY(laserY);
     }
 }
