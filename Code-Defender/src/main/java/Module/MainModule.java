@@ -3,9 +3,7 @@ package Module;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +34,8 @@ public class MainModule {
     private static final String CHARACTER_SEPARATOR = "++++";
 
     private void loadEnemyAttributes() {
-        try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/JSON/" + ENEMY_FILE_PATH))) {
+        try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + ENEMY_FILE_PATH);
+             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             Map<String, String> currentEnemyData = new HashMap<>();
             boolean newCharacter = true;
