@@ -116,45 +116,61 @@ private Pane root;
             double newX = enemyView.getLayoutX() - 1; // Adjust speed as needed
             double newY = enemyView.getLayoutY(); // Keep Y position unchanged
 
+            List<ImageView> enemyViews = spawner.getEnemyViews();
+
             // Update the layout coordinates for the enemy's ImageView
             enemyView.setLayoutX(newX);
             enemyView.setLayoutY(newY);
 
-            // Check for collisions with player (assuming player is a rectangle)
-            List<ImageView> enemyViews = spawner.getEnemyViews();
-
-            collisionsCheck(enemyViews, enemyView, iterator);
+            if (newX + enemyView.getBoundsInParent().getWidth() < 0) {
+                for (ImageView enemyV : enemyViews) {
+                    if (enemyV == enemyView) {
+                        delete(enemyViews, enemyView, iterator, enemyV);
+                        break;
+                    }
+                }
+            } else {
+                collisionsCheck(enemyViews, enemyView, iterator);
+            }
         }
     }
 
 
+
+
+
+
     public void collisionsCheck(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator) {
-        for (ImageView enemyV : enemyViews) {
-            if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
-
-                System.out.println("Checking collisions...");
-                System.out.println("Player bounds: " + mainModule.playerView.getBoundsInParent());
-                System.out.println("Enemy bounds: " + enemyView.getBoundsInParent());
-
-
-                // Handle collision between player and current enemy
-                System.out.println("Player collided with an enemy!");
-                iterator.remove();
-
-                root.getChildren().remove(enemyView);
-                root.getChildren().remove(enemyV);
-
-                enemyViews.remove(enemyView);
-                enemyViews.remove(enemyV);
-
-                spawner.getEnemyViews().remove(enemyV);
-                spawner.getEnemyViews().remove(enemyView);
-
-                enemies.remove(enemyV);
-                enemies.remove(enemyView);
-                break;
+        // Check if the enemy is within the visible area of the screen
+        if (enemyView.getLayoutX() + enemyView.getBoundsInParent().getWidth() >= 0) {
+            for (ImageView enemyV : enemyViews) {
+                // Check for collision only if the player's bounds intersect with the enemy's bounds
+                if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+                    // Handle collision between player and current enemy
+                    System.out.println("Player collided with an enemy!");
+                    delete(enemyViews, enemyView, iterator, enemyV);
+                    return; // Exit loop after handling collision with the current enemy
+                }
             }
         }
+    }
+
+
+    public void delete(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, ImageView enemyV)
+    {
+        iterator.remove();
+
+        root.getChildren().remove(enemyView);
+        root.getChildren().remove(enemyV);
+
+        enemyViews.remove(enemyView);
+        enemyViews.remove(enemyV);
+
+        spawner.getEnemyViews().remove(enemyV);
+        spawner.getEnemyViews().remove(enemyView);
+
+        enemies.remove(enemyV);
+        enemies.remove(enemyView);
     }
 
 
