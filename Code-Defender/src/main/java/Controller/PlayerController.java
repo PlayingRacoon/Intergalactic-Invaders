@@ -131,17 +131,8 @@ private Pane root;
             enemyView.setLayoutX(newX);
             enemyView.setLayoutY(newY);
 
-            if (newX + enemyView.getBoundsInParent().getWidth() <= 0) { //// doesnt work
-                for (ImageView enemyV : enemyViews) {
-                    if (enemyV == enemyView) {
-                        delete(enemyViews, enemyView, iterator, enemyV);
-                        System.out.println("behind 0");
-                        break;
-                    }
-                }
-            } else {
                 collisionsCheck(enemyViews, enemyView, iterator);
-            }
+
         }
     }
 
@@ -152,7 +143,7 @@ private Pane root;
 
     public void collisionsCheck(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator) {
         // Check if the enemy is within the visible area of the screen
-        if (enemyView.getLayoutX() + enemyView.getBoundsInParent().getWidth() >= 0) {
+
             for (ImageView enemyV : enemyViews) {
                 // Check for collision only if the player's bounds intersect with the enemy's bounds
                 if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
@@ -169,7 +160,6 @@ private Pane root;
                     return; // Exit loop after handling collision with the current enemy
                 }
             }
-        }
     }
 
 

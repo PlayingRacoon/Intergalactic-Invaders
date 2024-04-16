@@ -3,9 +3,13 @@ package Module;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import Controller.PlayerController;
+import Module.MainModule;
+import javafx.scene.paint.Color;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Spawner {
@@ -14,16 +18,22 @@ public class Spawner {
     private Stage primaryStage;
     private PlayerController playerController;
 
-    private int spawnTime = 10; // Initial spawn time in 5 seconds
+    private int spawnTime = 5; // Initial spawn time in 5 seconds
     private long lastSpawnTime = 0;
 
     private ArrayList<ImageView> enemyViews = new ArrayList<>(); // Track enemy ImageViews
+    private Rectangle deleteBoundary; // Delete boundary for enemies behind the screen
 
     public Spawner(Stage primaryStage, Pane root, MainModule mainModule, PlayerController playerController) {
         this.root = root;
         this.mainModule = mainModule;
         this.primaryStage = primaryStage;
         this.playerController = playerController;
+
+        // Initialize delete boundary
+        deleteBoundary = new Rectangle(-200, 0, 100, primaryStage.getHeight()); // Adjust dimensions as needed x is first
+        deleteBoundary.setFill(Color.TRANSPARENT); // Make it transparent
+        root.getChildren().add(deleteBoundary);
 
         // Start the spawning loop
         startSpawning();
@@ -62,13 +72,18 @@ public class Spawner {
                 double newX = enemyView.getLayoutX() - 1; // Adjust speed as needed
                 enemyView.setLayoutX(newX);
 
-                if (newX + enemyView.getBoundsInParent().getWidth() < 0) {
-                    root.getChildren().remove(enemyView);
-                    this.stop(); // Stop the movement animation
+                // Check if the enemy touches or crosses the delete boundary
+                if (enemyView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
+                    delete(enemyViews, enemyView);
                 }
             }
         };
         enemyMovement.start();
+    }
+
+    private void delete(List<ImageView> enemyViews, ImageView enemyView) {
+        root.getChildren().remove(enemyView);
+        enemyViews.remove(enemyView);
     }
 
     public List<ImageView> getEnemyViews() {

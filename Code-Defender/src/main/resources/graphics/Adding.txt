@@ -19,6 +19,7 @@ Und viellecht auch sowas wie mercenaries also shiffe die dir helfen und so
 
 
 
+
 private void moveEnemies() {
     Iterator<Enemy> iterator = enemies.iterator();
     while (iterator.hasNext()) {
