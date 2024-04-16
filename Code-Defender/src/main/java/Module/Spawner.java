@@ -20,6 +20,7 @@ public class Spawner {
 
     private int spawnTime = 5; // Initial spawn time in 5 seconds
     private long lastSpawnTime = 0;
+    private long delay = 1_000_000_000;
 
     private ArrayList<ImageView> enemyViews = new ArrayList<>(); // Track enemy ImageViews
     private Rectangle deleteBoundary; // Delete boundary for enemies behind the screen
@@ -43,9 +44,11 @@ public class Spawner {
         AnimationTimer spawnerTimer = new AnimationTimer() {
             @Override
             public void handle(long timestamp) {
-                if (timestamp - lastSpawnTime >= spawnTime * 1_000_000_000) {
+                if (timestamp - lastSpawnTime >= spawnTime * 1_000_000_000 + delay) {
                     spawnEnemy();
                     lastSpawnTime = timestamp;
+                    delay -= 5_000_000; //delay until the next enemy spawns (spawn time gets faster)
+                    //System.out.println(delay);
                 }
             }
         };
