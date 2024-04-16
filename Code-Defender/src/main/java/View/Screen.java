@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import Controller.PlayerController;
 import Module.MainModule;
 import Module.Spawner;
+import Module.PointCounter;
 
 public class Screen extends Application {
     AnchorPane root = new AnchorPane();
@@ -34,26 +35,19 @@ public class Screen extends Application {
         PlayerController playerController = new PlayerController(mainStage, mainModule, null, root);
         playerController.start();
 
-// Initialize and start the Spawner after PlayerController initialization
+        // Initialize and start the Spawner after PlayerController initialization
         Spawner spawner = new Spawner(mainStage, root, mainModule, playerController);
         playerController.setSpawner(spawner); // Set the Spawner instance
-        playerController.start();
-
-
-        // Initialize PlayerController after scene creation
-
-        spawner.setPlayerController(playerController);
-
-        
         spawner.startSpawning();
-        playerController.start();
+
+        PointCounter pointCounter = new PointCounter(root);
+        pointCounter.setDisplayCounter(true); // Set to true to display the counter
+
+        // Pass the pointCounter to PlayerController
+        playerController.setPointCounter(pointCounter);
     }
-
-
 
     public static void main(String[] args) {
         launch();
     }
 }
-
-

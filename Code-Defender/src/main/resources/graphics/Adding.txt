@@ -6,6 +6,7 @@ they can also fight withour ships 25x25
 
 enemy types:
 
+explosionen hinzufügen
 spawner 
 mother ship (multiple lifes)
 catapults (using asteroids)

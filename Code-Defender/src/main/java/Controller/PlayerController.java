@@ -9,6 +9,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 import Module.Spawner;
+import Module.PointCounter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,6 +36,7 @@ public class PlayerController {
     private double sceneHeight;
 private Pane root;
     private Spawner spawner;
+    private PointCounter pointCounter;
 
     // Constructor
     public PlayerController(Stage primaryStage, MainModule mainModule, Spawner spawner, Pane root) {
@@ -44,7 +46,14 @@ private Pane root;
         updateSceneSize();
         initialize();
         this.root = root;
+        this.pointCounter = null;
     }
+
+    // Setter method for PointCounter
+    public void setPointCounter(PointCounter pointCounter) {
+        this.pointCounter = pointCounter;
+    }
+
 
     // Setter method for Spawner
     public void setSpawner(Spawner spawner) {
@@ -63,7 +72,7 @@ private Pane root;
 
     public void start() {
         mainModule.playerView.setLayoutY(240);
-        mainModule.playerView.setLayoutX(-3);
+        mainModule.playerView.setLayoutX(2);
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -113,8 +122,8 @@ private Pane root;
         while (iterator.hasNext()) {
             Enemy enemy = iterator.next();
             ImageView enemyView = enemy.getImageView();
-            double newX = enemyView.getLayoutX() - 1; // Adjust speed as needed
-            double newY = enemyView.getLayoutY(); // Keep Y position unchanged
+            double newX = enemyView.getLayoutX() - 1;
+            double newY = enemyView.getLayoutY();
 
             List<ImageView> enemyViews = spawner.getEnemyViews();
 
@@ -122,10 +131,11 @@ private Pane root;
             enemyView.setLayoutX(newX);
             enemyView.setLayoutY(newY);
 
-            if (newX + enemyView.getBoundsInParent().getWidth() < 0) {
+            if (newX + enemyView.getBoundsInParent().getWidth() <= 0) { //// doesnt work
                 for (ImageView enemyV : enemyViews) {
                     if (enemyV == enemyView) {
                         delete(enemyViews, enemyView, iterator, enemyV);
+                        System.out.println("behind 0");
                         break;
                     }
                 }
@@ -147,8 +157,15 @@ private Pane root;
                 // Check for collision only if the player's bounds intersect with the enemy's bounds
                 if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
                     // Handle collision between player and current enemy
-                    System.out.println("Player collided with an enemy!");
                     delete(enemyViews, enemyView, iterator, enemyV);
+                    try {
+                        delete(enemyViews, enemyView, iterator, enemyV);
+                    }
+                    catch(Exception e) {
+                        System.out.println(" ");
+                    }
+
+                    System.out.println("Player collided with an enemy!");
                     return; // Exit loop after handling collision with the current enemy
                 }
             }
