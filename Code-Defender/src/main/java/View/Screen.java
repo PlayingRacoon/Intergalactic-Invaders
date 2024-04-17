@@ -45,6 +45,12 @@ public class Screen extends Application {
 
         // Pass the pointCounter to PlayerController
         playerController.setPointCounter(pointCounter);
+
+        scene.setOnKeyPressed(event -> {
+            if (event.getCode().toString().equals("SPACE")) {
+                spawner.spawnLaser();
+            }
+        });
     }
 
     public static void main(String[] args) {

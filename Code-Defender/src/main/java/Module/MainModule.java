@@ -12,9 +12,14 @@ public class MainModule {
     public ImageView enemyView;
     private Enemy enemy; // Assuming Enemy class exists
 
+    public ImageView laserView;
+    private Laser laser; // Assuming Enemy class exists
+
 
 
     public int chosenEnemy = 5; // number of the enemy that gets chosen from 1 to ....
+
+    public int chosenLaser = 1; // number of the enemy that gets chosen from 1 to ....
 
     public MainModule(double stageWidth, double stageHeight) {
         playerView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/player/SpaceShip.gif")));
@@ -24,6 +29,17 @@ public class MainModule {
             initializeEnemy(stageWidth, stageHeight); // Initialize enemy only if its position is within reasonable bounds
         } else {
             System.err.println("Error: enemyImage is null. Check if loadEnemyAttributes() is properly executed.");
+        }
+        loadLaserAttributes();
+        //for Pessi197
+        laserImage="file:C:\\Users\\pasca\\Schule\\POS\\JavaFX_Project\\Code-Invader\\Code-Defender\\src\\main\\resources\\graphics\\png\\player\\laser(player).gif";
+        if (laserImage != null) {
+            //laserView = new ImageView(new Image(getClass().getResourceAsStream(laserImage)));
+            //once again doesn't work for Pessi197
+            laserView=new ImageView(laserImage);
+            initializeEnemy(stageWidth, stageHeight); // Initialize laser only if its position is within reasonable bounds
+        } else {
+            System.err.println("Error: laserImage is null. Check if loadEnemyAttributes() is properly executed.");
         }
     }
 
@@ -36,6 +52,14 @@ public class MainModule {
 
     private static final String ENEMY_FILE_PATH = "enemies.txt";
     private static final String CHARACTER_SEPARATOR = "++++";
+
+    public Map<Integer, Map<String, String>> allLasersData = new HashMap<>();
+    public String laserImage;
+    public String laserType;
+    public double laserSpeed;
+    public int laserDamage;
+
+    private static final String Laser_FILE_PATH = "lasers.txt";
 
     private void loadEnemyAttributes() {
         try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + ENEMY_FILE_PATH);
@@ -100,5 +124,68 @@ public class MainModule {
         enemy = new Enemy(enemyView.getImage(), enemySpeed, enemyDamage, enemyHitpoints, chosenEnemy);
         enemyView.setLayoutX(enemyX);
         enemyView.setLayoutY(enemyY);
+    }
+
+    private void loadLaserAttributes() {
+        try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + ENEMY_FILE_PATH);
+             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line;
+            Map<String, String> currentLaserData = new HashMap<>();
+            boolean newCharacter = true;
+            while ((line = br.readLine()) != null) {
+                if (line.equals(CHARACTER_SEPARATOR)) {
+                    // Separator detected, start a new character
+                    if (!currentLaserData.isEmpty()) {
+                        int laserNumber = Integer.parseInt(currentLaserData.getOrDefault("/number", "-1"));
+                        if (laserNumber != -1) {
+                            allLasersData.put(laserNumber, new HashMap<>(currentLaserData));
+                        }
+                        currentLaserData.clear();
+                    }
+                    newCharacter = true;
+                } else {
+                    // Process attributes for the current character
+                    String[] parts = line.split(":");
+                    if (parts.length == 2) {
+                        currentLaserData.put(parts[0].trim(), parts[1].trim());
+                    } else {
+                        System.err.println("Error: Invalid format in " + ENEMY_FILE_PATH);
+                    }
+                }
+            }
+            // Store the last character's data
+            if (!currentLaserData.isEmpty()) {
+                int laserNumber = Integer.parseInt(currentLaserData.getOrDefault("/number", "-1"));
+                if (laserNumber != -1) {
+                    allLasersData.put(laserNumber, new HashMap<>(currentLaserData));
+                }
+            }
+
+            // Check if the chosen laser exists in the loaded data
+            if (allLasersData.containsKey(chosenLaser)) {
+                Map<String, String> chosenLaserData = allLasersData.get(chosenLaser);
+                laserImage = "/graphics/png/lasers/" + chosenLaserData.getOrDefault("/image", "");
+                laserType = chosenLaserData.getOrDefault("/type", "");
+                laserSpeed = Double.parseDouble(chosenLaserData.getOrDefault("/speed", "0.0"));
+                laserDamage = Integer.parseInt(chosenLaserData.getOrDefault("/damage", "0"));
+            } else {
+                System.err.println("Error: Chosen laser number not found.");
+            }
+        } catch (IOException | NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initializeLaser(double stageWidth, double stageHeight) {
+        // Calculate the initial Y position of the laser within reasonable bounds
+        double laserY = Math.max(0, Math.min(stageHeight - laserView.getBoundsInParent().getHeight(), 240));
+
+        // Set the initial X position of the laser to the right edge of the screen
+        double laserX = stageWidth - laserView.getBoundsInParent().getWidth();
+
+        // Create and initialize the laser
+        laser = new Laser(laserView.getImage(), laserSpeed, laserDamage, chosenLaser);
+        laserView.setLayoutX(laserX);
+        laserView.setLayoutY(laserY);
     }
 }
