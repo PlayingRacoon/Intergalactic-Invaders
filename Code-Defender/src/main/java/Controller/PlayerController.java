@@ -188,9 +188,36 @@ private Pane root;
 
 
     public void addPointsPerDefeat(int ENumber){
-        pointCounter.count += 50;
-        pointCounter.updateCounter();
         System.out.println(ENumber);
+
+        switch (ENumber)
+        {
+            case 1: //melee
+                pointCounter.count += 100;
+                pointCounter.updateCounter();
+                break;
+            case 2: //ranged
+                pointCounter.count += 125;
+                pointCounter.updateCounter();
+                break;
+            case 3: //armored_ranged
+                pointCounter.count += 200;
+                pointCounter.updateCounter();
+                break;
+            case 4: //armored_melee
+                pointCounter.count += 175;
+                pointCounter.updateCounter();
+                break;
+            case 5: //ship
+                pointCounter.count += 400;
+                pointCounter.updateCounter();
+                break;
+                case 6: //speedster
+                pointCounter.count += 300;
+                pointCounter.updateCounter();
+                break;
+        }
+
     }
 
 
