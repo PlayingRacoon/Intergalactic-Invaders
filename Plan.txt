@@ -1,0 +1,27 @@
+JavaFX Project (Pascal Pessenlehner, Neil Finn Helber)
+
+1.	Woche:
+	Videospiel im Style von Space Invaders
+	Besprechen
+	Github starten
+2.	Woche:
+	Grundriss (gegner, laser, hitboxen)
+	Prototyp Grafiken
+3.	Woche:
+•	Ende
+•	Punktesystem
+4.	Woche:
+	Mehr Gegner
+•	Powerups
+•	Andere Schüsse
+5.	Woche:
+•	Upgrade System
+•	2 Modi (mit/ohne Upgrades)
+6.	Woche:
+•	UI
+•	Musik
+7.	Woche:
+•	Balancing
+•	Game Tests
+8.	Woche:
+•	Fertige Grafik
