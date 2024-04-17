@@ -7,6 +7,9 @@ public class Enemy {
     private ImageView imageView;
     private double speed;
     private int damage;
+    private int enemyNumber;
+    private int hitpoints;
+    private String type;
 
     public Enemy(Image image, double speed, int damage, int enemyHitpoints, int chosenEnemy) {
         imageView = new ImageView(image);
@@ -24,5 +27,17 @@ public class Enemy {
 
     public int getDamage() {
         return damage;
+    }
+
+    public int getEnemyNumber() {
+        return enemyNumber;
+    }
+
+    public int getHitpoints() {
+        return hitpoints;
+    }
+
+    public String getType() {
+        return type;
     }
 }

@@ -22,6 +22,8 @@ public class Spawner {
     private long lastSpawnTime = 0;
     private long delay = 1_000_000_000;
 
+    private List<EnemyAttributes> enemyAttributesList = new ArrayList<>();
+
     private ArrayList<ImageView> enemyViews = new ArrayList<>(); // Track enemy ImageViews
     private Rectangle deleteBoundary; // Delete boundary for enemies behind the screen
 
@@ -30,6 +32,7 @@ public class Spawner {
         this.mainModule = mainModule;
         this.primaryStage = primaryStage;
         this.playerController = playerController;
+        playerController.setEnemyAttributesList(enemyAttributesList);
 
         // Initialize delete boundary
         deleteBoundary = new Rectangle(-200, 0, 100, primaryStage.getHeight()); // Adjust dimensions as needed x is first
@@ -62,6 +65,15 @@ public class Spawner {
 
         enemyY = Math.max(enemyY, 0); // Ensure enemy is not spawned above the screen
         enemyY = Math.min(enemyY, primaryStage.getHeight() - enemyView.getImage().getHeight()); // Ensure enemy is not spawned below the screen
+
+        // Retrieve attributes from MainModule class
+        double enemySpeed = mainModule.enemySpeed;
+        int enemyDamage = mainModule.enemyDamage;
+        int enemyHitpoints = mainModule.enemyHitpoints;
+        String enemyType = String.valueOf(mainModule.chosenEnemy);
+
+        EnemyAttributes enemyAttributes = new EnemyAttributes(enemySpeed, enemyDamage, enemyHitpoints, enemyType);
+        enemyAttributesList.add(enemyAttributes);
 
         playerController.initializeEnemy(enemyView, enemyX, enemyY);
         root.getChildren().add(enemyView);

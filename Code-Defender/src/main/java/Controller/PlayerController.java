@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
 import Module.Spawner;
 import Module.PointCounter;
+import Module.EnemyAttributes;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -37,6 +38,12 @@ public class PlayerController {
 private Pane root;
     private Spawner spawner;
     private PointCounter pointCounter;
+    private List<EnemyAttributes> enemyAttributesList;
+
+    // Method to set the enemy attributes list
+    public void setEnemyAttributesList(List<EnemyAttributes> enemyAttributesList) {
+        this.enemyAttributesList = enemyAttributesList;
+    }
 
     // Constructor
     public PlayerController(Stage primaryStage, MainModule mainModule, Spawner spawner, Pane root) {
@@ -63,6 +70,7 @@ private Pane root;
         // Create and initialize the enemy
         Enemy enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage, mainModule.enemyHitpoints, mainModule.chosenEnemy);
         enemies.add(enemy);
+
         // Set the layout coordinates for the enemy's ImageView
         enemyView.setLayoutX(enemyX);
         enemyView.setLayoutY(enemyY);
@@ -89,6 +97,7 @@ private Pane root;
         // Add listeners to scene width and height properties to update scene size
         primaryScene.widthProperty().addListener((obs, oldVal, newVal) -> updateSceneSize());
         primaryScene.heightProperty().addListener((obs, oldVal, newVal) -> updateSceneSize());
+
     }
 
     private void updateSceneSize() {
@@ -117,6 +126,7 @@ private Pane root;
         mainModule.playerView.setLayoutY(newY);
     }
 
+
     private void moveEnemies() {
         Iterator<Enemy> iterator = enemies.iterator();
         while (iterator.hasNext()) {
@@ -127,12 +137,24 @@ private Pane root;
 
             List<ImageView> enemyViews = spawner.getEnemyViews();
 
+            int enemyNumber = 0;
+            for (EnemyAttributes enemyAttributes : enemyAttributesList) {
+                double enemySpeed = enemyAttributes.getSpeed();
+                int enemyDamage = enemyAttributes.getDamage();
+                int enemyHitpoints = enemyAttributes.getHitpoints();
+                String enemyType = enemyAttributes.getType();
+
+                enemyNumber = Integer.parseInt(enemyType);
+            }
+
             // Update the layout coordinates for the enemy's ImageView
             enemyView.setLayoutX(newX);
             enemyView.setLayoutY(newY);
 
-                collisionsCheck(enemyViews, enemyView, iterator);
+            // Check for collisions
+            collisionsCheck(enemyViews, enemyView, iterator, enemyNumber);
 
+            // Now you have access to all attributes of the current enemy, you can perform any additional actions here
         }
     }
 
@@ -141,44 +163,55 @@ private Pane root;
 
 
 
-    public void collisionsCheck(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator) {
+
+    public void collisionsCheck(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, int ENNumber) {
         // Check if the enemy is within the visible area of the screen
 
             for (ImageView enemyV : enemyViews) {
-                // Check for collision only if the player's bounds intersect with the enemy's bounds
-                if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
-                    // Handle collision between player and current enemy
-                    delete(enemyViews, enemyView, iterator, enemyV);
-                    try {
-                        delete(enemyViews, enemyView, iterator, enemyV);
-                    }
-                    catch(Exception e) {
-                        System.out.println(" ");
-                    }
 
-                    System.out.println("Player collided with an enemy!");
-                    return; // Exit loop after handling collision with the current enemy
+                    // Check for collision only if the player's bounds intersect with the enemy's bounds
+                    if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+                        try {
+
+                            kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
+
+                        } catch (Exception e) {
+                            System.out.println(" ");
+                        }
+
+
+                        System.out.println("Player collided with an enemy!");
+                        return; // Exit loop after handling collision with the current enemy
+                    }
                 }
             }
+
+
+    public void addPointsPerDefeat(int ENumber){
+        pointCounter.count += 50;
+        pointCounter.updateCounter();
+        System.out.println(ENumber);
     }
 
 
-    public void delete(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, ImageView enemyV)
-    {
-        iterator.remove();
+    public void kill(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, ImageView enemyV, int ENNumber) {
+            addPointsPerDefeat(ENNumber);
 
-        root.getChildren().remove(enemyView);
-        root.getChildren().remove(enemyV);
+            iterator.remove();
 
-        enemyViews.remove(enemyView);
-        enemyViews.remove(enemyV);
+            root.getChildren().remove(enemyView);
+            root.getChildren().remove(enemyV);
 
-        spawner.getEnemyViews().remove(enemyV);
-        spawner.getEnemyViews().remove(enemyView);
+            enemyViews.remove(enemyView);
+            enemyViews.remove(enemyV);
 
-        enemies.remove(enemyV);
-        enemies.remove(enemyView);
-    }
+            spawner.getEnemyViews().remove(enemyV);
+            spawner.getEnemyViews().remove(enemyView);
+
+            enemies.remove(enemyV);
+            enemies.remove(enemyView);
+        }
+
 
 
 
