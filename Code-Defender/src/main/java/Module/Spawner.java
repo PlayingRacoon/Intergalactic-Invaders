@@ -116,8 +116,8 @@ public class Spawner {
 
     public void spawnLaser() {
         ImageView laserView = new ImageView(mainModule.laserView.getImage());
-        double laserX = primaryStage.getWidth(); // Spawn at the right edge of the screen
-        double laserY = Math.random() * (primaryStage.getHeight() - laserView.getImage().getHeight());
+        double laserX = mainModule.playerView.getLayoutX()+60; // Spawn laser on player
+        double laserY = mainModule.playerView.getLayoutY()+29;
 
         laserY = Math.max(laserY, 0); // Ensure laser is not spawned above the screen
         laserY = Math.min(laserY, primaryStage.getHeight() - laserView.getImage().getHeight()); // Ensure laser is not spawned below the screen
@@ -139,7 +139,7 @@ public class Spawner {
         AnimationTimer laserMovement = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                double newX = laserView.getLayoutX() - 1; // Adjust speed as needed
+                double newX = laserView.getLayoutX() + 1; // Adjust speed as needed
                 laserView.setLayoutX(newX);
 
                 // Check if the laser touches or crosses the delete boundary

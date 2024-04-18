@@ -186,8 +186,12 @@ public class PlayerController {
                         System.out.println("Player collided with an enemy!");
                         return; // Exit loop after handling collision with the current enemy
                     }
-                }
+
+
+
             }
+
+    }
 
 
     public void addPointsPerDefeat(int ENumber){
