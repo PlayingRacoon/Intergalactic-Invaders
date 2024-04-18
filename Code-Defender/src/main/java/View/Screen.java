@@ -2,7 +2,13 @@ package View;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import Controller.PlayerController;
 import Module.MainModule;
@@ -15,6 +21,11 @@ public class Screen extends Application {
     @Override
     public void start(Stage mainStage) throws Exception {
         mainStage.setTitle("Code Defender");
+
+        // Set background image
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/graphics/png/SPACE.gif"));
+        ImageView backgroundView = new ImageView(backgroundImage);
+        root.getChildren().add(backgroundView);
 
         MainModule mainModule = new MainModule(mainStage.getWidth(), mainStage.getHeight()); // Pass stage dimensions
         root.getChildren().add(mainModule.playerView);
