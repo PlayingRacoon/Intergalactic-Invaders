@@ -27,6 +27,10 @@ public class Spawner {
     private ArrayList<ImageView> enemyViews = new ArrayList<>(); // Track enemy ImageViews
     private Rectangle deleteBoundary; // Delete boundary for enemies behind the screen
 
+    private List<LaserAttributes> laserAttributesList = new ArrayList<>();
+
+    private ArrayList<ImageView> laserViews = new ArrayList<>(); // Track laser ImageViews
+
     public Spawner(Stage primaryStage, Pane root, MainModule mainModule, PlayerController playerController) {
         this.root = root;
         this.mainModule = mainModule;
@@ -108,5 +112,46 @@ public class Spawner {
     // Method to set the PlayerController instance
     public void setPlayerController(PlayerController playerController) {
         this.playerController = playerController;
+    }
+
+    public void spawnLaser() {
+        ImageView laserView = new ImageView(mainModule.laserView.getImage());
+        double laserX = primaryStage.getWidth(); // Spawn at the right edge of the screen
+        double laserY = Math.random() * (primaryStage.getHeight() - laserView.getImage().getHeight());
+
+        laserY = Math.max(laserY, 0); // Ensure laser is not spawned above the screen
+        laserY = Math.min(laserY, primaryStage.getHeight() - laserView.getImage().getHeight()); // Ensure laser is not spawned below the screen
+
+        // Retrieve attributes from MainModule class
+        double laserSpeed = mainModule.laserSpeed;
+        int laserDamage = mainModule.laserDamage;
+        String laserType = String.valueOf(mainModule.chosenLaser);
+
+        LaserAttributes laserAttributes = new LaserAttributes(laserSpeed, laserDamage, laserType);
+        laserAttributesList.add(laserAttributes);
+
+        playerController.initializeLaser(laserView, laserX, laserY);
+        root.getChildren().add(laserView);
+
+        // Add the laser's ImageView to the list
+        laserViews.add(laserView);
+
+        AnimationTimer laserMovement = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                double newX = laserView.getLayoutX() - 1; // Adjust speed as needed
+                laserView.setLayoutX(newX);
+
+                // Check if the laser touches or crosses the delete boundary
+                if (laserView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
+                    delete(laserViews, laserView);
+                }
+            }
+        };
+        laserMovement.start();
+    }
+
+    public List<ImageView> getLaserViews() {
+        return laserViews;
     }
 }

@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import Module.Spawner;
 import Module.PointCounter;
 import Module.EnemyAttributes;
+import Module.Laser;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,10 +36,12 @@ public class PlayerController {
     private Scene primaryScene;
     private double sceneWidth;
     private double sceneHeight;
-private Pane root;
+    private Pane root;
     private Spawner spawner;
     private PointCounter pointCounter;
     private List<EnemyAttributes> enemyAttributesList;
+
+    private ArrayList<Laser> lasers = new ArrayList<>(); // ArrayList to hold Enemy objects
 
     // Method to set the enemy attributes list
     public void setEnemyAttributesList(List<EnemyAttributes> enemyAttributesList) {
@@ -260,5 +263,15 @@ private Pane root;
             else if (code == KeyCode.A) aPressed = false;
             else if (code == KeyCode.D) dPressed = false;
         });
+    }
+
+    public void initializeLaser(ImageView laserView, double laserX, double laserY) {
+        // Create and initialize the laser
+        Laser laser = new Laser(mainModule.laserView.getImage(), mainModule.laserSpeed, mainModule.laserDamage, mainModule.chosenLaser);
+        lasers.add(laser);
+
+        // Set the layout coordinates for the laser's ImageView
+        laserView.setLayoutX(laserX);
+        laserView.setLayoutY(laserY);
     }
 }

@@ -9,7 +9,7 @@ JavaFX Project (Pascal Pessenlehner, Neil Finn Helber)
 	Prototyp Grafiken
 3.	Woche:
 •	Ende
-•	Punktesystem
+	Punktesystem
 4.	Woche:
 	Mehr Gegner
 •	Powerups
