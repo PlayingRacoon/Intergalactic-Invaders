@@ -37,7 +37,7 @@ public class MainModule {
             //laserView = new ImageView(new Image(getClass().getResourceAsStream(laserImage)));
             //once again doesn't work for Pessi197
             laserView=new ImageView(laserImage);
-            initializeEnemy(stageWidth, stageHeight); // Initialize laser only if its position is within reasonable bounds
+            initializeLaser(stageWidth, stageHeight); // Initialize laser only if its position is within reasonable bounds
         } else {
             System.err.println("Error: laserImage is null. Check if loadEnemyAttributes() is properly executed.");
         }
