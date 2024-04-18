@@ -5,10 +5,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import Controller.PlayerController;
 import Module.MainModule;
@@ -23,7 +19,7 @@ public class Screen extends Application {
         mainStage.setTitle("Code Defender");
 
         // Set background image
-        Image backgroundImage = new Image(getClass().getResourceAsStream("/graphics/png/SPACE.gif"));
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/graphics/png/space_1.gif"));
         ImageView backgroundView = new ImageView(backgroundImage);
         root.getChildren().add(backgroundView);
 
@@ -41,20 +37,27 @@ public class Screen extends Application {
 
         mainStage.show();
 
-        // Initialize Spawner before PlayerController
-        // Initialize PlayerController after scene creation
-        PlayerController playerController = new PlayerController(mainStage, mainModule, null, root);
+        // Load the laser image
+        // Load the laser image
+        Image laserImage = new Image(getClass().getResourceAsStream("/graphics/png/player/laser(player).gif"));
+
+// Initialize Spawner with the laserImage
+        Spawner spawner = new Spawner(mainStage, root, mainModule, laserImage);
+        spawner.startSpawning(); // Start spawning enemies
+
+
+        // Initialize PlayerController with Spawner instance
+        PlayerController playerController = new PlayerController(mainStage, mainModule, spawner, root, laserImage);
         playerController.start();
 
-        // Initialize and start the Spawner after PlayerController initialization
-        Spawner spawner = new Spawner(mainStage, root, mainModule, playerController);
-        playerController.setSpawner(spawner); // Set the Spawner instance
-        spawner.startSpawning();
+        // Start spawning enemies
 
+
+        // Initialize and display the point counter
         PointCounter pointCounter = new PointCounter(root);
-        pointCounter.setDisplayCounter(true); // Set to true to display the counter
+        pointCounter.setDisplayCounter(true);
 
-        // Pass the pointCounter to PlayerController
+        // Pass the point counter to PlayerController
         playerController.setPointCounter(pointCounter);
     }
 

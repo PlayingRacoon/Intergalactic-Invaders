@@ -4,6 +4,7 @@ import Module.Enemy;
 import Module.MainModule;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -11,6 +12,7 @@ import javafx.scene.image.ImageView;
 import Module.Spawner;
 import Module.PointCounter;
 import Module.EnemyAttributes;
+import Module.Laser;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -35,7 +37,8 @@ public class PlayerController {
     private Scene primaryScene;
     private double sceneWidth;
     private double sceneHeight;
-private Pane root;
+    private Pane root;
+    private Laser laser;
     private Spawner spawner;
     private PointCounter pointCounter;
     private List<EnemyAttributes> enemyAttributesList;
@@ -44,15 +47,18 @@ private Pane root;
     public void setEnemyAttributesList(List<EnemyAttributes> enemyAttributesList) {
         this.enemyAttributesList = enemyAttributesList;
     }
+    private Image laserImage;
 
     // Constructor
-    public PlayerController(Stage primaryStage, MainModule mainModule, Spawner spawner, Pane root) {
+    public PlayerController(Stage primaryStage, MainModule mainModule, Spawner spawner, Pane root, Image laserImage) {
         this.mainModule = mainModule;
         this.primaryScene = primaryStage.getScene();
         this.spawner = spawner;
+        this.root = root;
+        this.laserImage = laserImage; // Assign the provided laser image
+        this.laser = new Laser(this.laserImage, root, 5); // Initialize Laser with the provided image
         updateSceneSize();
         initialize();
-        this.root = root;
         this.pointCounter = null;
     }
 
@@ -61,11 +67,11 @@ private Pane root;
         this.pointCounter = pointCounter;
     }
 
-
     // Setter method for Spawner
     public void setSpawner(Spawner spawner) {
         this.spawner = spawner;
     }
+
     public void initializeEnemy(ImageView enemyView, double enemyX, double enemyY) {
         // Create and initialize the enemy
         Enemy enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage, mainModule.enemyHitpoints, mainModule.chosenEnemy);
@@ -75,8 +81,6 @@ private Pane root;
         enemyView.setLayoutX(enemyX);
         enemyView.setLayoutY(enemyY);
     }
-
-
 
     public void start() {
         mainModule.playerView.setLayoutY(240);
@@ -93,12 +97,14 @@ private Pane root;
     }
 
     private void initialize() {
-        movementSetup();
         // Add listeners to scene width and height properties to update scene size
         primaryScene.widthProperty().addListener((obs, oldVal, newVal) -> updateSceneSize());
         primaryScene.heightProperty().addListener((obs, oldVal, newVal) -> updateSceneSize());
 
+        // Call movement setup during initialization
+        movementSetup();
     }
+
 
     private void updateSceneSize() {
         sceneWidth = primaryScene.getWidth();
@@ -125,7 +131,6 @@ private Pane root;
         mainModule.playerView.setLayoutX(newX);
         mainModule.playerView.setLayoutY(newY);
     }
-
 
     private void moveEnemies() {
         Iterator<Enemy> iterator = enemies.iterator();
@@ -158,40 +163,31 @@ private Pane root;
         }
     }
 
-
-
-
-
-
-
     public void collisionsCheck(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, int ENNumber) {
         // Check if the enemy is within the visible area of the screen
 
-            for (ImageView enemyV : enemyViews) {
+        for (ImageView enemyV : enemyViews) {
 
-                    // Check for collision only if the player's bounds intersect with the enemy's bounds
-                    if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
-                        try {
+            // Check for collision only if the player's bounds intersect with the enemy's bounds
+            if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+                try {
 
-                            kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
+                    kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
 
-                        } catch (Exception e) {
-                            System.out.println(" ");
-                        }
-
-
-                        System.out.println("Player collided with an enemy!");
-                        return; // Exit loop after handling collision with the current enemy
-                    }
+                } catch (Exception e) {
+                    System.out.println(" ");
                 }
+
+                System.out.println("Player collided with an enemy!");
+                return; // Exit loop after handling collision with the current enemy
             }
+        }
+    }
 
-
-    public void addPointsPerDefeat(int ENumber){
+    public void addPointsPerDefeat(int ENumber) {
         System.out.println(ENumber);
 
-        switch (ENumber)
-        {
+        switch (ENumber) {
             case 1: //melee
                 pointCounter.count += 100;
                 pointCounter.updateCounter();
@@ -212,7 +208,7 @@ private Pane root;
                 pointCounter.count += 400;
                 pointCounter.updateCounter();
                 break;
-                case 6: //speedster
+            case 6: //speedster
                 pointCounter.count += 300;
                 pointCounter.updateCounter();
                 break;
@@ -220,39 +216,39 @@ private Pane root;
 
     }
 
-
     public void kill(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, ImageView enemyV, int ENNumber) {
-            addPointsPerDefeat(ENNumber);
+        addPointsPerDefeat(ENNumber);
 
-            iterator.remove();
+        iterator.remove();
 
-            root.getChildren().remove(enemyView);
-            root.getChildren().remove(enemyV);
+        root.getChildren().remove(enemyView);
+        root.getChildren().remove(enemyV);
 
-            enemyViews.remove(enemyView);
-            enemyViews.remove(enemyV);
+        enemyViews.remove(enemyView);
+        enemyViews.remove(enemyV);
 
-            spawner.getEnemyViews().remove(enemyV);
-            spawner.getEnemyViews().remove(enemyView);
+        spawner.getEnemyViews().remove(enemyV);
+        spawner.getEnemyViews().remove(enemyView);
 
-            enemies.remove(enemyV);
-            enemies.remove(enemyView);
-        }
+        enemies.remove(enemyV);
+        enemies.remove(enemyView);
+    }
 
-
-
-
-
-    // Setup for movement, DO NOT CHANGE!
     private void movementSetup() {
+        // Ensure the scene is focused
+        root.requestFocus();
+
+        // Handle key press events
         primaryScene.setOnKeyPressed(e -> {
             KeyCode code = e.getCode();
             if (code == KeyCode.W) wPressed = true;
             else if (code == KeyCode.S) sPressed = true;
             else if (code == KeyCode.A) aPressed = true;
             else if (code == KeyCode.D) dPressed = true;
+            else if (code == KeyCode.SPACE) shootLaser();
         });
 
+        // Handle key release events
         primaryScene.setOnKeyReleased(e -> {
             KeyCode code = e.getCode();
             if (code == KeyCode.W) wPressed = false;
@@ -260,5 +256,13 @@ private Pane root;
             else if (code == KeyCode.A) aPressed = false;
             else if (code == KeyCode.D) dPressed = false;
         });
+    }
+
+
+    // Method to shoot laser
+    private void shootLaser() {
+        double startX = mainModule.playerView.getLayoutX() + mainModule.playerView.getImage().getWidth();
+        double startY = mainModule.playerView.getLayoutY() + mainModule.playerView.getImage().getHeight() / 2;
+        laser.shoot(startX, startY);
     }
 }

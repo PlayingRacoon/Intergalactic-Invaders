@@ -21,7 +21,7 @@ public class PointCounter {
 
     private void initializeCounter() {
         counterLabel = new Label("Points: " + count);
-        counterLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        counterLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 25));
         AnchorPane.setTopAnchor(counterLabel, 10.0);
         AnchorPane.setRightAnchor(counterLabel, 10.0);
         root.getChildren().add(counterLabel);
