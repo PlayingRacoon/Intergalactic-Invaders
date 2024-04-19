@@ -31,12 +31,8 @@ public class MainModule {
             System.err.println("Error: enemyImage is null. Check if loadEnemyAttributes() is properly executed.");
         }
         loadLaserAttributes();
-        //for Pessi197
-        laserView =new ImageView(new Image(getClass().getResourceAsStream("graphics/png/player/laser(player).gif")));
         if (laserImage != null) {
-            //laserView = new ImageView(new Image(getClass().getResourceAsStream(laserImage)));
-            //once again doesn't work for Pessi197
-            laserView=new ImageView(laserImage);
+            laserView = new ImageView(new Image(getClass().getResourceAsStream(laserImage)));
             initializeLaser(stageWidth, stageHeight); // Initialize laser only if its position is within reasonable bounds
         } else {
             System.err.println("Error: laserImage is null. Check if loadEnemyAttributes() is properly executed.");
@@ -59,7 +55,7 @@ public class MainModule {
     public double laserSpeed;
     public int laserDamage;
 
-    private static final String Laser_FILE_PATH = "lasers.txt";
+    private static final String LASER_FILE_PATH = "lasers.txt";
 
     private void loadEnemyAttributes() {
         try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + ENEMY_FILE_PATH);
@@ -127,7 +123,7 @@ public class MainModule {
     }
 
     private void loadLaserAttributes() {
-        try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + ENEMY_FILE_PATH);
+        try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + LASER_FILE_PATH);
              BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             Map<String, String> currentLaserData = new HashMap<>();
@@ -149,7 +145,7 @@ public class MainModule {
                     if (parts.length == 2) {
                         currentLaserData.put(parts[0].trim(), parts[1].trim());
                     } else {
-                        System.err.println("Error: Invalid format in " + ENEMY_FILE_PATH);
+                        System.err.println("Error: Invalid format in " + LASER_FILE_PATH);
                     }
                 }
             }
@@ -164,7 +160,7 @@ public class MainModule {
             // Check if the chosen laser exists in the loaded data
             if (allLasersData.containsKey(chosenLaser)) {
                 Map<String, String> chosenLaserData = allLasersData.get(chosenLaser);
-                laserImage = "/graphics/png/lasers/" + chosenLaserData.getOrDefault("/image", "");
+                laserImage = "/graphics/png/player/" + chosenLaserData.getOrDefault("/image", "");
                 laserType = chosenLaserData.getOrDefault("/type", "");
                 laserSpeed = Double.parseDouble(chosenLaserData.getOrDefault("/speed", "0.0"));
                 laserDamage = Integer.parseInt(chosenLaserData.getOrDefault("/damage", "0"));
