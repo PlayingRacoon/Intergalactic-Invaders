@@ -114,41 +114,48 @@ public class Spawner {
         this.playerController = playerController;
     }
 
+    private long lastLaserFireTime = 0;
+
     public void spawnLaser() {
-        ImageView laserView = new ImageView(mainModule.laserView.getImage());
-        double laserX = mainModule.playerView.getLayoutX()+60; // Spawn laser on player
-        double laserY = mainModule.playerView.getLayoutY()+29;
+        long currentTime = System.nanoTime();
+        if(currentTime - lastLaserFireTime >= 500_000_000){
+            ImageView laserView = new ImageView(mainModule.laserView.getImage());
+            double laserX = mainModule.playerView.getLayoutX() + 60; // Spawn laser on player
+            double laserY = mainModule.playerView.getLayoutY() + 29;
 
-        laserY = Math.max(laserY, 0); // Ensure laser is not spawned above the screen
-        laserY = Math.min(laserY, primaryStage.getHeight() - laserView.getImage().getHeight()); // Ensure laser is not spawned below the screen
+            laserY = Math.max(laserY, 0); // Ensure laser is not spawned above the screen
+            laserY = Math.min(laserY, primaryStage.getHeight() - laserView.getImage().getHeight()); // Ensure laser is not spawned below the screen
 
-        // Retrieve attributes from MainModule class
-        double laserSpeed = mainModule.laserSpeed;
-        int laserDamage = mainModule.laserDamage;
-        String laserType = String.valueOf(mainModule.chosenLaser);
+            // Retrieve attributes from MainModule class
+            double laserSpeed = mainModule.laserSpeed;
+            int laserDamage = mainModule.laserDamage;
+            String laserType = String.valueOf(mainModule.chosenLaser);
 
-        LaserAttributes laserAttributes = new LaserAttributes(laserSpeed, laserDamage, laserType);
-        laserAttributesList.add(laserAttributes);
+            LaserAttributes laserAttributes = new LaserAttributes(laserSpeed, laserDamage, laserType);
+            laserAttributesList.add(laserAttributes);
 
-        playerController.initializeLaser(laserView, laserX, laserY);
-        root.getChildren().add(laserView);
+            playerController.initializeLaser(laserView, laserX, laserY);
+            root.getChildren().add(laserView);
 
-        // Add the laser's ImageView to the list
-        laserViews.add(laserView);
+            // Add the laser's ImageView to the list
+            laserViews.add(laserView);
 
-        AnimationTimer laserMovement = new AnimationTimer() {
-            @Override
-            public void handle(long now) {
-                double newX = laserView.getLayoutX() + 1; // Adjust speed as needed
-                laserView.setLayoutX(newX);
+            AnimationTimer laserMovement = new AnimationTimer() {
+                @Override
+                public void handle(long now) {
+                    double newX = laserView.getLayoutX() + 1; // Adjust speed as needed
+                    laserView.setLayoutX(newX);
 
-                // Check if the laser touches or crosses the delete boundary
-                if (laserView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
-                    delete(laserViews, laserView);
+                    // Check if the laser touches or crosses the delete boundary
+                    if (laserView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
+                        delete(laserViews, laserView);
+                    }
                 }
-            }
-        };
-        laserMovement.start();
+            };
+            laserMovement.start();
+
+            lastLaserFireTime = currentTime;
+        }
     }
 
     public List<ImageView> getLaserViews() {
