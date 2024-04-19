@@ -158,6 +158,8 @@ public class PlayerController {
             collisionsCheck(enemyViews, enemyView, iterator, enemyNumber);
 
             // Now you have access to all attributes of the current enemy, you can perform any additional actions here
+
+            collisionsCheckLaser(enemyViews, enemyView, iterator, enemyNumber);
         }
     }
 
@@ -190,6 +192,32 @@ public class PlayerController {
 
 
             }
+
+    }
+
+    public void collisionsCheckLaser(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, int ENNumber) {
+        // Check if the enemy is within the visible area of the screen
+
+        for (ImageView enemyV : enemyViews) {
+
+            // Check for collision only if the player's bounds intersect with the enemy's bounds
+            if (mainModule.laserView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+                try {
+
+                    kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
+
+                } catch (Exception e) {
+                    System.out.println(" ");
+                }
+
+
+                System.out.println("Laser collided with an enemy!");
+                return; // Exit loop after handling collision with the current enemy
+            }
+
+
+
+        }
 
     }
 
@@ -252,8 +280,12 @@ public class PlayerController {
 
     // Setup for movement, DO NOT CHANGE!
     private void movementSetup() {
+
         primaryScene.setOnKeyPressed(e -> {
             KeyCode code = e.getCode();
+            if (e.getCode().toString().equals("SPACE")) {
+                spawner.spawnLaser();
+            }
             if (code == KeyCode.W) wPressed = true;
             else if (code == KeyCode.S) sPressed = true;
             else if (code == KeyCode.A) aPressed = true;
