@@ -3,6 +3,7 @@ package Module;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import javax.sound.sampled.*;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,13 +14,11 @@ public class MainModule {
     private Enemy enemy; // Assuming Enemy class exists
 
     public ImageView laserView;
-    private Laser laser; // Assuming Enemy class exists
-
-
+    private Laser laser; // Assuming Laser class exists
 
     public int chosenEnemy = 5; // number of the enemy that gets chosen from 1 to ....
 
-    public int chosenLaser = 1; // number of the enemy that gets chosen from 1 to ....
+    public int chosenLaser = 1; // number of the laser that gets chosen from 1 to ....
 
     public MainModule(double stageWidth, double stageHeight) {
         playerView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/player/SpaceShip.gif")));
@@ -56,6 +55,8 @@ public class MainModule {
     public int laserDamage;
 
     private static final String LASER_FILE_PATH = "lasers.txt";
+
+    private static final String EXPLOSION_SOUND_PATH = "/sounds/explosion.wav";
 
     private void loadEnemyAttributes() {
         try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + ENEMY_FILE_PATH);
@@ -183,5 +184,34 @@ public class MainModule {
         laser = new Laser(laserView.getImage(), laserSpeed, laserDamage, chosenLaser);
         laserView.setLayoutX(laserX);
         laserView.setLayoutY(laserY);
+    }
+
+    // Method to play the explosion sound
+    public void playExplosionSound() {
+        try {
+            
+            File soundFile = new File(getClass().getResource(EXPLOSION_SOUND_PATH).toURI());
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (Exception e) {
+            System.err.println("Error playing explosion sound: " + e.getMessage());
+        }
+    }
+
+    // Method to handle enemy death
+    private void handleEnemyDeath() {
+        // Perform actions related to enemy death here
+        // For example, you might remove the enemy from the screen
+        // and then play the explosion sound
+        playExplosionSound();
+    }
+
+    // Example method to simulate enemy death
+    public void simulateEnemyDeath() {
+        // This is just a placeholder method to simulate enemy death
+        // You should replace it with your actual logic to detect enemy death
+        handleEnemyDeath();
     }
 }

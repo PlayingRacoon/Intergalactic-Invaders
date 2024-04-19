@@ -177,7 +177,6 @@ public class PlayerController {
                     // Check for collision only if the player's bounds intersect with the enemy's bounds
                     if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
                         try {
-
                             kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
 
                         } catch (Exception e) {
@@ -257,6 +256,7 @@ public class PlayerController {
 
 
     public void kill(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, ImageView enemyV, int ENNumber) {
+        mainModule.playExplosionSound();
             addPointsPerDefeat(ENNumber);
 
             iterator.remove();
