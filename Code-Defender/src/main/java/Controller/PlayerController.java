@@ -197,25 +197,28 @@ public class PlayerController {
 
     public void collisionsCheckLaser(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, int ENNumber) {
         // Check if the enemy is within the visible area of the screen
+        List<ImageView> laserViews=spawner.getLaserViews();
+        for (ImageView laserV : laserViews) {
 
-        for (ImageView enemyV : enemyViews) {
+            for (ImageView enemyV : enemyViews) {
 
-            // Check for collision only if the player's bounds intersect with the enemy's bounds
-            if (mainModule.laserView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
-                try {
+                // Check for collision only if the player's bounds intersect with the enemy's bounds
+                if (laserV.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+                    try {
 
-                    kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
+                        kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
 
-                } catch (Exception e) {
-                    System.out.println(" ");
+                    } catch (Exception e) {
+                        System.out.println(" ");
+                    }
+
+
+                    System.out.println("Laser collided with an enemy!");
+                    return; // Exit loop after handling collision with the current enemy
                 }
 
 
-                System.out.println("Laser collided with an enemy!");
-                return; // Exit loop after handling collision with the current enemy
             }
-
-
 
         }
 

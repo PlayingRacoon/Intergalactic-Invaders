@@ -32,7 +32,7 @@ public class MainModule {
         }
         loadLaserAttributes();
         //for Pessi197
-        laserImage="file:C:\\Users\\pasca\\Schule\\POS\\JavaFX_Project\\Code-Invader\\Code-Defender\\src\\main\\resources\\graphics\\png\\player\\laser(player).gif";
+        laserView =new ImageView(new Image(getClass().getResourceAsStream("graphics/png/player/laser(player).gif")));
         if (laserImage != null) {
             //laserView = new ImageView(new Image(getClass().getResourceAsStream(laserImage)));
             //once again doesn't work for Pessi197
