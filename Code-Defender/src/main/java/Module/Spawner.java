@@ -139,6 +139,7 @@ public class Spawner {
 
             // Add the laser's ImageView to the list
             laserViews.add(laserView);
+            mainModule.playSound("laser");
 
             AnimationTimer laserMovement = new AnimationTimer() {
                 @Override

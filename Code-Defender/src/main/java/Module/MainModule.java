@@ -56,7 +56,7 @@ public class MainModule {
 
     private static final String LASER_FILE_PATH = "lasers.txt";
 
-    private static final String EXPLOSION_SOUND_PATH = "/sounds/explosion.wav";
+    private static String EXPLOSION_SOUND_PATH = " ";
 
     private void loadEnemyAttributes() {
         try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + ENEMY_FILE_PATH);
@@ -187,9 +187,38 @@ public class MainModule {
     }
 
     // Method to play the explosion sound
-    public void playExplosionSound() {
+    public void playSound(String soundChosen) {
+
+        EXPLOSION_SOUND_PATH = " ";
+        switch (soundChosen){
+            case "buy":
+                EXPLOSION_SOUND_PATH = "/sounds/buy(1).wav";
+                break;
+
+            case "explosion":
+                EXPLOSION_SOUND_PATH = "/sounds/explosion(2).wav";
+                break;
+
+            case "ftl":
+                EXPLOSION_SOUND_PATH = "/sounds/ftl(3).wav";
+                break;
+
+            case "laser":
+                EXPLOSION_SOUND_PATH = "/sounds/laserShoot(4).wav";
+                break;
+
+            case "menu":
+                EXPLOSION_SOUND_PATH = "/sounds/menuopen(5).wav";
+                break;
+
+            case "option":
+                EXPLOSION_SOUND_PATH = "/sounds/option(6).wav";
+                break;
+
+        }
+
+
         try {
-            
             File soundFile = new File(getClass().getResource(EXPLOSION_SOUND_PATH).toURI());
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(soundFile);
             Clip clip = AudioSystem.getClip();
@@ -205,7 +234,7 @@ public class MainModule {
         // Perform actions related to enemy death here
         // For example, you might remove the enemy from the screen
         // and then play the explosion sound
-        playExplosionSound();
+        playSound("explosion");
     }
 
     // Example method to simulate enemy death
