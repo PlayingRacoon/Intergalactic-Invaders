@@ -3,7 +3,10 @@ package Controller;
 import Module.Enemy;
 import Module.MainModule;
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -12,10 +15,11 @@ import Module.Spawner;
 import Module.PointCounter;
 import Module.EnemyAttributes;
 import Module.Laser;
+import javafx.util.Duration;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import javax.print.attribute.standard.Media;
+import java.io.File;
+import java.util.*;
 
 public class PlayerController {
     private boolean wPressed = false;
@@ -31,6 +35,7 @@ public class PlayerController {
     private ArrayList<Enemy> enemies = new ArrayList<>(); // ArrayList to hold Enemy objects
 
     private int movementVariable = 2; // Movement speed
+    private String open = "shop";
 
     private MainModule mainModule;
     private Scene primaryScene;
@@ -248,28 +253,60 @@ public class PlayerController {
                 pointCounter.updateCounter();
                 break;
         }
+        if (pointCounter.count >= pointCounter.tempSavePointNumber + 2500 && open != null)
+        {
+            if (open.equals("shop"))
+            {
+
+                open = "navigation";
+                //open shop
+
+            } else if (open.equals("navigation")) {
+
+                open = "shop";
+                //open space map
+            }
+            pointCounter.tempSavePointNumber = pointCounter.count;
+        }
 
     }
 
 
     public void kill(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, ImageView enemyV, int ENNumber) {
+        // Play explosion sound
         mainModule.playSound("explosion");
-            addPointsPerDefeat(ENNumber);
 
-            iterator.remove();
+        // Add points based on enemy type
+        addPointsPerDefeat(ENNumber);
 
-            root.getChildren().remove(enemyView);
-            root.getChildren().remove(enemyV);
+        // Load GIF file
+        double gifX = enemyView.getLayoutX();
+        double gifY = enemyView.getLayoutY();
+        Image gifImage = new Image(getClass().getResource("/graphics/png/explosion.gif").toString());
+        ImageView gifView = new ImageView(gifImage);
+        gifView.setLayoutX(gifX);
+        gifView.setLayoutY(gifY);
+        root.getChildren().add(gifView);
 
-            enemyViews.remove(enemyView);
-            enemyViews.remove(enemyV);
+        // Remove the GIF view after 5 seconds
+        PauseTransition pause = new PauseTransition(Duration.seconds(5));
+        pause.setOnFinished(e -> {
+            root.getChildren().remove(gifView);
+        });
+        pause.play();
 
-            spawner.getEnemyViews().remove(enemyV);
-            spawner.getEnemyViews().remove(enemyView);
+        // Remove enemy and its view from the scene
+        iterator.remove();
+        root.getChildren().remove(enemyView);
+        root.getChildren().remove(enemyV);
+        enemyViews.remove(enemyView);
+        enemyViews.remove(enemyV);
+        spawner.getEnemyViews().remove(enemyV);
+        spawner.getEnemyViews().remove(enemyView);
+        enemies.remove(enemyV);
+        enemies.remove(enemyView);
+    }
 
-            enemies.remove(enemyV);
-            enemies.remove(enemyView);
-        }
 
 
 

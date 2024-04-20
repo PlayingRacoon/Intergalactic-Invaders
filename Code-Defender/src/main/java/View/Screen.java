@@ -24,7 +24,7 @@ public class Screen extends Application {
         mainStage.setTitle("Code Defender");
 
         // Set background image
-        Image backgroundImage = new Image(getClass().getResourceAsStream("/graphics/png/backrounds/space1.png")); // Corrected path
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/graphics/png/backrounds/earth.png")); // Corrected path
         ImageView backgroundView = new ImageView(backgroundImage);
         root.getChildren().add(backgroundView);
 

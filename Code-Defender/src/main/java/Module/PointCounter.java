@@ -12,6 +12,8 @@ public class PointCounter {
     private Label counterLabel;
     private AnchorPane root;
 
+    public int tempSavePointNumber = 0;
+
     public PointCounter(AnchorPane root) {
         this.root = root;
         this.count = 0;
@@ -21,7 +23,7 @@ public class PointCounter {
 
     private void initializeCounter() {
         counterLabel = new Label("Points: " + count);
-        counterLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 14));
+        counterLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 19));
         AnchorPane.setTopAnchor(counterLabel, 10.0);
         AnchorPane.setRightAnchor(counterLabel, 10.0);
         root.getChildren().add(counterLabel);
