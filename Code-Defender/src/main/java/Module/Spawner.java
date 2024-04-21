@@ -1,6 +1,7 @@
 package Module;
 
 import javafx.animation.AnimationTimer;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -18,6 +19,7 @@ public class Spawner {
     private Stage primaryStage;
     private PlayerController playerController;
 
+    public boolean keepSpawning = true;
     private int spawnTime = 5; // Initial spawn time in 5 seconds
     private long lastSpawnTime = 0;
     private long delay = 1_000_000_000;
@@ -51,11 +53,19 @@ public class Spawner {
         AnimationTimer spawnerTimer = new AnimationTimer() {
             @Override
             public void handle(long timestamp) {
-                if (timestamp - lastSpawnTime >= spawnTime * 1_000_000_000 + delay) {
+                if (timestamp - lastSpawnTime >= spawnTime * 1_000_000_000 + delay && keepSpawning) {
                     spawnEnemy();
                     lastSpawnTime = timestamp;
-                    delay -= 5_000_000; //delay until the next enemy spawns (spawn time gets faster)
-                    //System.out.println(delay);
+
+                    if (playerController.chosenEnemy == 3 || playerController.chosenEnemy == 12)
+                    {
+                        keepSpawning = false;
+                    }
+
+                    if (delay <= 250_000_000) {
+                        delay -= 5_000_000; //delay until the next enemy spawns (spawn time gets faster)
+                        //System.out.println(delay);
+                    }
                 }
             }
         };
@@ -63,7 +73,15 @@ public class Spawner {
     }
 
     private void spawnEnemy() {
-        ImageView enemyView = new ImageView(mainModule.enemyView.getImage());
+            // Create a new ImageView for the enemy
+        mainModule.loadEnemyAttributes(playerController.chosenEnemy);
+            ImageView enemyView = new ImageView();
+
+            // Load the enemy image from the file path
+            Image enemyImage = new Image(getClass().getResourceAsStream(mainModule.enemyImage));
+
+            // Set the loaded image to the enemy ImageView
+            enemyView.setImage(enemyImage);
         double enemyX = primaryStage.getWidth(); // Spawn at the right edge of the screen
         double enemyY = Math.random() * (primaryStage.getHeight() - enemyView.getImage().getHeight());
 
@@ -99,6 +117,7 @@ public class Spawner {
         };
         enemyMovement.start();
     }
+
 
     private void delete(List<ImageView> enemyViews, ImageView enemyView) {
         root.getChildren().remove(enemyView);

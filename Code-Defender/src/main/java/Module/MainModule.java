@@ -1,5 +1,7 @@
 package Module;
 
+import Controller.PlayerController;
+import View.Screen;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -16,13 +18,14 @@ public class MainModule {
     public ImageView laserView;
     private Laser laser; // Assuming Laser class exists
 
+
     public int chosenEnemy = 5; // number of the enemy that gets chosen from 1 to ....
 
     public int chosenLaser = 1; // number of the laser that gets chosen from 1 to ....
 
     public MainModule(double stageWidth, double stageHeight) {
         playerView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/player/SpaceShip.gif")));
-        loadEnemyAttributes();
+        loadEnemyAttributes(chosenEnemy);
         if (enemyImage != null) {
             enemyView = new ImageView(new Image(getClass().getResourceAsStream(enemyImage)));
             initializeEnemy(stageWidth, stageHeight); // Initialize enemy only if its position is within reasonable bounds
@@ -58,7 +61,7 @@ public class MainModule {
 
     private static String EXPLOSION_SOUND_PATH = " ";
 
-    private void loadEnemyAttributes() {
+    public void loadEnemyAttributes(int chosenEnemy) {
         try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + ENEMY_FILE_PATH);
              BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
@@ -118,10 +121,14 @@ public class MainModule {
         double enemyX = stageWidth - enemyView.getBoundsInParent().getWidth();
 
         // Create and initialize the enemy
-        enemy = new Enemy(enemyView.getImage(), enemySpeed, enemyDamage, enemyHitpoints, chosenEnemy);
+        enemy = new Enemy(new Image(getClass().getResourceAsStream(enemyImage)), enemySpeed, enemyDamage, enemyHitpoints, chosenEnemy);
+        enemyView.setImage(new Image(getClass().getResourceAsStream(enemyImage))); // Update the image
         enemyView.setLayoutX(enemyX);
         enemyView.setLayoutY(enemyY);
     }
+
+
+
 
     private void loadLaserAttributes() {
         try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + LASER_FILE_PATH);

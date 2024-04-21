@@ -4,7 +4,6 @@ import Module.Enemy;
 import Module.MainModule;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -17,8 +16,6 @@ import Module.EnemyAttributes;
 import Module.Laser;
 import javafx.util.Duration;
 
-import javax.print.attribute.standard.Media;
-import java.io.File;
 import java.util.*;
 
 public class PlayerController {
@@ -35,7 +32,7 @@ public class PlayerController {
     private ArrayList<Enemy> enemies = new ArrayList<>(); // ArrayList to hold Enemy objects
 
     private int movementVariable = 2; // Movement speed
-    private String open = "shop";
+    private String openNext = "shop";
 
     private MainModule mainModule;
     private Scene primaryScene;
@@ -45,6 +42,9 @@ public class PlayerController {
     private Spawner spawner;
     private PointCounter pointCounter;
     private List<EnemyAttributes> enemyAttributesList;
+
+    public int chosenEnemy = 5;
+    private int bossKilled = 0;
 
     private ArrayList<Laser> lasers = new ArrayList<>(); // ArrayList to hold Enemy objects
 
@@ -154,6 +154,7 @@ public class PlayerController {
 
                 enemyNumber = Integer.parseInt(enemyType);
             }
+            enemyNumber = chosenEnemy;
 
             // Update the layout coordinates for the enemy's ImageView
             enemyView.setLayoutX(newX);
@@ -245,7 +246,8 @@ public class PlayerController {
                 pointCounter.updateCounter();
                 break;
             case 5: //ship
-                pointCounter.count += 400;
+                pointCounter.count += 2500;
+                //standard 400
                 pointCounter.updateCounter();
                 break;
                 case 6: //speedster
@@ -253,18 +255,14 @@ public class PlayerController {
                 pointCounter.updateCounter();
                 break;
         }
-        if (pointCounter.count >= pointCounter.tempSavePointNumber + 2500 && open != null)
+        if (pointCounter.count >= pointCounter.tempSavePointNumber + 2500 && openNext != null)
         {
-            if (open.equals("shop"))
+            if (openNext.equals("shop"))
             {
-
-                open = "navigation";
-                //open shop
-
-            } else if (open.equals("navigation")) {
-
-                open = "shop";
-                //open space map
+                chosenEnemy = 3;
+                //chosenEnemy = 11; mach enemy 1mal zum 11er boss
+            } else if (openNext.equals("navigation")) {
+                //chosenEnemy = 12; mach enemy 1mal zum 12er boss
             }
             pointCounter.tempSavePointNumber = pointCounter.count;
         }
@@ -275,6 +273,19 @@ public class PlayerController {
     public void kill(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, ImageView enemyV, int ENNumber) {
         // Play explosion sound
         mainModule.playSound("explosion");
+        if (ENNumber == 11){
+
+            //open shop instead
+                spawner.keepSpawning = true;
+                openNext = "navigation";
+                //get to spawnWave after
+
+        } else if (ENNumber == 12) {
+
+            spawner.keepSpawning = true;
+            openNext = "shop";
+
+        }
 
         // Add points based on enemy type
         addPointsPerDefeat(ENNumber);

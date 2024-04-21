@@ -1,0 +1,15 @@
+explosionen angezeigt wenn der gegner stirbt
+
+gegner spawnen inn wellen
+
+boss kampf
+
+shop
+
+planeten chooser
+
+lade gegner etc per planet
+
+spieler stirbt
+
+leben für gegner und spieler
