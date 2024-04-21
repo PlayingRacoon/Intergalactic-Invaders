@@ -12,6 +12,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import Module.SpawnWave;
 
 public class Spawner {
     private Pane root;
@@ -32,6 +33,7 @@ public class Spawner {
     private List<LaserAttributes> laserAttributesList = new ArrayList<>();
 
     private ArrayList<ImageView> laserViews = new ArrayList<>(); // Track laser ImageViews
+    SpawnWave spawnWave = new SpawnWave();
 
     public Spawner(Stage primaryStage, Pane root, MainModule mainModule, PlayerController playerController) {
         this.root = root;
@@ -74,7 +76,8 @@ public class Spawner {
 
     private void spawnEnemy() {
             // Create a new ImageView for the enemy
-        mainModule.loadEnemyAttributes(playerController.chosenEnemy);
+        spawnWave.spawnChoosenEnemy();
+        mainModule.loadEnemyAttributes(spawnWave.chosenEnemy);
             ImageView enemyView = new ImageView();
 
             // Load the enemy image from the file path

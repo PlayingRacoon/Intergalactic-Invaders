@@ -15,6 +15,7 @@ import Module.PointCounter;
 import Module.EnemyAttributes;
 import Module.Laser;
 import javafx.util.Duration;
+import Module.SpawnWave;
 
 import java.util.*;
 
@@ -42,8 +43,8 @@ public class PlayerController {
     private Spawner spawner;
     private PointCounter pointCounter;
     private List<EnemyAttributes> enemyAttributesList;
+    SpawnWave spawnWave = new SpawnWave();
 
-    public int chosenEnemy = 5;
     private int bossKilled = 0;
 
     private ArrayList<Laser> lasers = new ArrayList<>(); // ArrayList to hold Enemy objects
@@ -154,7 +155,7 @@ public class PlayerController {
 
                 enemyNumber = Integer.parseInt(enemyType);
             }
-            enemyNumber = chosenEnemy;
+            enemyNumber = spawnWave.chosenEnemy;
 
             // Update the layout coordinates for the enemy's ImageView
             enemyView.setLayoutX(newX);
@@ -259,10 +260,11 @@ public class PlayerController {
         {
             if (openNext.equals("shop"))
             {
-                chosenEnemy = 3;
                 //chosenEnemy = 11; mach enemy 1mal zum 11er boss
+                //spawnWave.wave = 2;
             } else if (openNext.equals("navigation")) {
                 //chosenEnemy = 12; mach enemy 1mal zum 12er boss
+                //spawnWave.wave = 1;
             }
             pointCounter.tempSavePointNumber = pointCounter.count;
         }
