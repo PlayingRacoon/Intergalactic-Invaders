@@ -2,6 +2,8 @@ package Module;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -26,6 +28,7 @@ public class PointCounter {
         counterLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 19));
         AnchorPane.setTopAnchor(counterLabel, 10.0);
         AnchorPane.setRightAnchor(counterLabel, 10.0);
+        counterLabel.setTextFill(Color.RED);
         root.getChildren().add(counterLabel);
         counterLabel.setVisible(displayCounter);
     }
