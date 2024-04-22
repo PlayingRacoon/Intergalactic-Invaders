@@ -5,12 +5,14 @@ public class EnemyAttributes {
     private int damage;
     private int hitpoints;
     private String type;
+    private int enemyNumber;
 
-    public EnemyAttributes(double speed, int damage, int hitpoints, String type) {
+    public EnemyAttributes(double speed, int damage, int hitpoints, String type, int enemyNumber) {
         this.speed = speed;
         this.damage = damage;
         this.hitpoints = hitpoints;
         this.type = type;
+        this.enemyNumber = enemyNumber;
     }
 
     // Getter methods
@@ -28,6 +30,10 @@ public class EnemyAttributes {
 
     public String getType() {
         return type;
+    }
+
+    public int getEnemyNumber() {
+        return enemyNumber;
     }
 }
 

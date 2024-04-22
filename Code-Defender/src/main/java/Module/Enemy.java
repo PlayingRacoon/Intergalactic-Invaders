@@ -15,6 +15,7 @@ public class Enemy {
         imageView = new ImageView(image);
         this.speed = speed;
         this.damage = damage;
+        this.enemyNumber = chosenEnemy;
     }
 
     public ImageView getImageView() {
@@ -40,4 +41,7 @@ public class Enemy {
     public String getType() {
         return type;
     }
+
+
 }
+

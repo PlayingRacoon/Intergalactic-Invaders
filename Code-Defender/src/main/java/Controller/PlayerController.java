@@ -46,6 +46,7 @@ public class PlayerController {
     SpawnWave spawnWave = new SpawnWave();
 
     private int bossKilled = 0;
+    private Map<ImageView, EnemyAttributes> enemyAttributesMap;
 
     private ArrayList<Laser> lasers = new ArrayList<>(); // ArrayList to hold Enemy objects
 
@@ -63,6 +64,8 @@ public class PlayerController {
         initialize();
         this.root = root;
         this.pointCounter = null;
+
+
     }
 
     // Setter method for PointCounter
@@ -137,6 +140,8 @@ public class PlayerController {
 
 
     private void moveEnemies() {
+        this.enemyAttributesMap = spawner.getEnemyAttributesMap();
+
         Iterator<Enemy> iterator = enemies.iterator();
         while (iterator.hasNext()) {
             Enemy enemy = iterator.next();
@@ -146,27 +151,25 @@ public class PlayerController {
 
             List<ImageView> enemyViews = spawner.getEnemyViews();
 
-            int enemyNumber = 0;
+
             for (EnemyAttributes enemyAttributes : enemyAttributesList) {
                 double enemySpeed = enemyAttributes.getSpeed();
                 int enemyDamage = enemyAttributes.getDamage();
                 int enemyHitpoints = enemyAttributes.getHitpoints();
                 String enemyType = enemyAttributes.getType();
-
-                enemyNumber = Integer.parseInt(enemyType);
             }
-            enemyNumber = spawnWave.chosenEnemy;
+
 
             // Update the layout coordinates for the enemy's ImageView
             enemyView.setLayoutX(newX);
             enemyView.setLayoutY(newY);
 
             // Check for collisions
-            collisionsCheck(enemyViews, enemyView, iterator, enemyNumber);
+            collisionsCheck(enemyViews, enemyView, iterator);
 
             // Now you have access to all attributes of the current enemy, you can perform any additional actions here
 
-            collisionsCheckLaser(enemyViews, enemyView, iterator, enemyNumber);
+            collisionsCheckLaser(enemyViews, enemyView, iterator);
         }
     }
 
@@ -176,13 +179,18 @@ public class PlayerController {
 
 
 
-    public void collisionsCheck(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, int ENNumber) {
+    public void collisionsCheck(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator) {
         // Check if the enemy is within the visible area of the screen
 
             for (ImageView enemyV : enemyViews) {
 
                     // Check for collision only if the player's bounds intersect with the enemy's bounds
                     if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+
+                        int ENNumber;
+                        ENNumber = spawner.enemyAttributesMap.get(enemyV).getEnemyNumber();
+
+
                         try {
                             kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
 
@@ -198,7 +206,7 @@ public class PlayerController {
 
     }
 
-    public void collisionsCheckLaser(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, int ENNumber) {
+    public void collisionsCheckLaser(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator) {
         // Check if the enemy is within the visible area of the screen
         List<ImageView> laserViews=spawner.getLaserViews();
         for (ImageView laserV : laserViews) {
@@ -209,6 +217,10 @@ public class PlayerController {
             for (ImageView enemyV : enemyViews) {
                 // Check for collision only if the laser's bounds intersect with the enemy's bounds
                 if (laserV.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+
+                    int ENNumber;
+                    ENNumber = spawner.enemyAttributesMap.get(enemyV).getEnemyNumber();
+
                     try {
                         kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
                         lasers.remove(laserV);
@@ -226,8 +238,7 @@ public class PlayerController {
 
 
     public void addPointsPerDefeat(int ENumber){
-        System.out.println(ENumber);
-
+        System.out.println("added points" + ENumber);
         switch (ENumber)
         {
             case 1: //melee
@@ -247,7 +258,7 @@ public class PlayerController {
                 pointCounter.updateCounter();
                 break;
             case 5: //ship
-                pointCounter.count += 2500;
+                pointCounter.count += 400;
                 //standard 400
                 pointCounter.updateCounter();
                 break;
@@ -255,8 +266,9 @@ public class PlayerController {
                 pointCounter.count += 300;
                 pointCounter.updateCounter();
                 break;
+
         }
-        if (pointCounter.count >= pointCounter.tempSavePointNumber + 2500 && openNext != null)
+        if (pointCounter.count >= pointCounter.tempSavePointNumber + 5000 && openNext != null)
         {
             if (openNext.equals("shop"))
             {
@@ -275,6 +287,7 @@ public class PlayerController {
     public void kill(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, ImageView enemyV, int ENNumber) {
         // Play explosion sound
         mainModule.playSound("explosion");
+
         if (ENNumber == 11){
 
             //open shop instead

@@ -9,9 +9,9 @@ import javafx.stage.Stage;
 import Controller.PlayerController;
 import Module.MainModule;
 import javafx.scene.paint.Color;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+
+import java.util.*;
+
 import Module.SpawnWave;
 
 public class Spawner {
@@ -34,6 +34,9 @@ public class Spawner {
 
     private ArrayList<ImageView> laserViews = new ArrayList<>(); // Track laser ImageViews
     SpawnWave spawnWave = new SpawnWave();
+
+    public Map<ImageView, EnemyAttributes> enemyAttributesMap = new HashMap<>();
+
 
     public Spawner(Stage primaryStage, Pane root, MainModule mainModule, PlayerController playerController) {
         this.root = root;
@@ -96,9 +99,13 @@ public class Spawner {
         int enemyDamage = mainModule.enemyDamage;
         int enemyHitpoints = mainModule.enemyHitpoints;
         String enemyType = String.valueOf(mainModule.chosenEnemy);
+        int enemyNumber = spawnWave.chosenEnemy;
 
-        EnemyAttributes enemyAttributes = new EnemyAttributes(enemySpeed, enemyDamage, enemyHitpoints, enemyType);
-        enemyAttributesList.add(enemyAttributes);
+        // Create enemy attributes object
+        EnemyAttributes enemyAttributes = new EnemyAttributes(enemySpeed, enemyDamage, enemyHitpoints, enemyType, enemyNumber);
+
+        // Store the enemy's attributes in the map using its ImageView as the key
+        enemyAttributesMap.put(enemyView, enemyAttributes);
 
         playerController.initializeEnemy(enemyView, enemyX, enemyY);
         root.getChildren().add(enemyView);
@@ -120,6 +127,7 @@ public class Spawner {
         };
         enemyMovement.start();
     }
+
 
 
     private void delete(List<ImageView> enemyViews, ImageView enemyView) {
@@ -179,6 +187,10 @@ public class Spawner {
 
             lastLaserFireTime = currentTime;
         }
+    }
+
+    public Map<ImageView, EnemyAttributes> getEnemyAttributesMap() {
+        return enemyAttributesMap;
     }
 
     public List<ImageView> getLaserViews() {
