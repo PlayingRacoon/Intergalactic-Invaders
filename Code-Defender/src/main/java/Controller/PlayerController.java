@@ -293,8 +293,8 @@ public class PlayerController {
         addPointsPerDefeat(ENNumber);
 
         // Load GIF file
-        double gifX = enemyView.getLayoutX();
-        double gifY = enemyView.getLayoutY();
+        double gifX = enemyV.getLayoutX();
+        double gifY = enemyV.getLayoutY();
         Image gifImage = new Image(getClass().getResource("/graphics/png/explosion.gif").toString());
         ImageView gifView = new ImageView(gifImage);
         gifView.setLayoutX(gifX);
@@ -302,7 +302,7 @@ public class PlayerController {
         root.getChildren().add(gifView);
 
         // Remove the GIF view after 5 seconds
-        PauseTransition pause = new PauseTransition(Duration.seconds(5));
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
         pause.setOnFinished(e -> {
             root.getChildren().remove(gifView);
         });
