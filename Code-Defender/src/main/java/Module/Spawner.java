@@ -59,7 +59,7 @@ public class Spawner {
                     spawnEnemy();
                     lastSpawnTime = timestamp;
 
-                    if (playerController.chosenEnemy == 3 || playerController.chosenEnemy == 12)
+                    if (spawnWave.chosenEnemy == 3 || spawnWave.chosenEnemy == 12)
                     {
                         keepSpawning = false;
                     }
