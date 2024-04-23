@@ -4,7 +4,7 @@ while aliens can fight in either ships 50x50 -> 75x75 or even 100 or 120 for bos
 they can also fight withour ships 25x25
 
 the backround is 1920 x 1080 and the smaller ones are the same but:4
-
+shift o for the 3d effect on t text
 
 enemy types:
 
@@ -17,7 +17,7 @@ fake asteroids
 tenet
 
 Wegen fähigkeiten überlegen wir uns noch, aber ich würd mal sagen fix sowas wie ein speedboost und ein cloak(da kann ich das visuell dann durchs bluren von nem character anzeigen lassen).
-Und viellecht auch sowas wie mercenaries also shiffe die dir helfen und so
+cUnd viellecht auch sowas wie mercenaries also shiffe die dir helfen und so
 
 
 

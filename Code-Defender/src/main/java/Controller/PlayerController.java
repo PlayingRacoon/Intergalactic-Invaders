@@ -44,6 +44,7 @@ public class PlayerController {
     private PointCounter pointCounter;
     private List<EnemyAttributes> enemyAttributesList;
     SpawnWave spawnWave = new SpawnWave();
+    boolean kal = false;
 
     private int bossKilled = 0;
     private Map<ImageView, EnemyAttributes> enemyAttributesMap;
@@ -185,7 +186,7 @@ public class PlayerController {
             for (ImageView enemyV : enemyViews) {
 
                     // Check for collision only if the player's bounds intersect with the enemy's bounds
-                    if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+                    if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent()) || kal) {
 
                         int ENNumber;
                         ENNumber = spawner.enemyAttributesMap.get(enemyV).getEnemyNumber();
@@ -216,7 +217,7 @@ public class PlayerController {
             }
             for (ImageView enemyV : enemyViews) {
                 // Check for collision only if the laser's bounds intersect with the enemy's bounds
-                if (laserV.getBoundsInParent().intersects(enemyV.getBoundsInParent())) {
+                if (laserV.getBoundsInParent().intersects(enemyV.getBoundsInParent()) || kal) {
 
                     int ENNumber;
                     ENNumber = spawner.enemyAttributesMap.get(enemyV).getEnemyNumber();
@@ -268,10 +269,13 @@ public class PlayerController {
                 break;
 
         }
+
         if (pointCounter.count >= pointCounter.tempSavePointNumber + 5000 && openNext != null)
         {
             if (openNext.equals("shop"))
             {
+                killAllEnemies();
+                spawner.keepSpawning = false;
                 //chosenEnemy = 11; mach enemy 1mal zum 11er boss
                 //spawnWave.wave = 2;
             } else if (openNext.equals("navigation")) {
@@ -283,27 +287,38 @@ public class PlayerController {
 
     }
 
+    public void killAllEnemies() {
+        kal = true;
+    }
+
 
     public void kill(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator, ImageView enemyV, int ENNumber) {
+
         // Play explosion sound
         mainModule.playSound("explosion");
 
         if (ENNumber == 11){
 
             //open shop instead
+            openShop();
+
+                kal = false;
                 spawner.keepSpawning = true;
                 openNext = "navigation";
                 //get to spawnWave after
 
         } else if (ENNumber == 12) {
 
+            kal = false;
             spawner.keepSpawning = true;
             openNext = "shop";
 
         }
 
-        // Add points based on enemy type
-        addPointsPerDefeat(ENNumber);
+        if (!kal) {
+            // Add points based on enemy type
+            addPointsPerDefeat(ENNumber);
+        }
 
         // Load GIF file
         double gifX = enemyV.getLayoutX();
@@ -333,6 +348,30 @@ public class PlayerController {
         enemies.remove(enemyView);
     }
 
+
+
+
+    private void openShop() {
+        // Retrieve the width and height of the primaryStage
+        double windowWidth = primaryScene.getWidth();
+        double windowHeight = primaryScene.getHeight();
+
+        // Load the shop image
+        Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shop.png"));
+
+        // Create an ImageView for the shop image
+        ImageView shopView = new ImageView(shopImage);
+
+        // Set the size of the ImageView to match the size of the window
+        shopView.setFitWidth(windowWidth);
+        shopView.setFitHeight(windowHeight);
+
+        // Add the ImageView to the root pane
+        root.getChildren().add(shopView);
+
+        // Handle mouse click to close the shop
+        shopView.setOnMouseClicked(e -> root.getChildren().remove(shopView));
+    }
 
 
 
@@ -369,5 +408,15 @@ public class PlayerController {
         // Set the layout coordinates for the laser's ImageView
         laserView.setLayoutX(laserX);
         laserView.setLayoutY(laserY);
+    }
+
+    public static void delay(int milliseconds) {
+        try {
+            // Sleep the current thread for the specified duration
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            // Handle interrupted exception if necessary
+            e.printStackTrace();
+        }
     }
 }
