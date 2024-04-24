@@ -189,27 +189,29 @@ public class PlayerController {
     public void collisionsCheck(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator) {
         // Check if the enemy is within the visible area of the screen
 
-            for (ImageView enemyV : enemyViews) {
+        for (ImageView enemyV : enemyViews) {
 
-                    // Check for collision only if the player's bounds intersect with the enemy's bounds
-                    if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent()) || kal) {
+            // Check for collision only if the player's bounds intersect with the enemy's bounds
+            if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent()) || kal) {
 
-                        int ENNumber;
-                        ENNumber = spawner.enemyAttributesMap.get(enemyV).getEnemyNumber();
-
-
-                        try {
-                            kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
-
-                        } catch (Exception e) {
-                            System.out.println(" ");
-                        }
+                int ENNumber;
+                ENNumber = spawner.enemyAttributesMap.get(enemyV).getEnemyNumber();
 
 
-                        System.out.println("Player collided with an enemy!");
-                        return; // Exit loop after handling collision with the current enemy
-                    }
+                try {
+                    kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
+
+                } catch (Exception e) {
+                    System.out.println(" ");
+                }
+
+
+                if (!kal) {
+                    System.out.println("Player collided with an enemy!");
+                }
+                return; // Exit loop after handling collision with the current enemy
             }
+        }
 
     }
 
@@ -268,12 +270,14 @@ public class PlayerController {
                 //standard 400
                 pointCounter.updateCounter();
                 break;
-                case 6: //speedster
+            case 6: //speedster
                 pointCounter.count += 300;
                 pointCounter.updateCounter();
                 break;
 
         }
+        killAllEnemies();
+        spawner.keepSpawning = false;
         openShop();
         if (pointCounter.count >= pointCounter.tempSavePointNumber + 5000 && openNext != null)
         {
@@ -307,10 +311,10 @@ public class PlayerController {
             //open shop instead
             openShop();
 
-                kal = false;
-                spawner.keepSpawning = true;
-                openNext = "navigation";
-                //get to spawnWave after
+            kal = false;
+            spawner.keepSpawning = true;
+            openNext = "navigation";
+            //get to spawnWave after
 
         } else if (ENNumber == 12) {
 
@@ -354,62 +358,10 @@ public class PlayerController {
     }
 
 
-    private void openShopFromTextFile(String currentPlanet) {
-        try {
-            InputStream inputStream = getClass().getResourceAsStream("/src/main/resources/JSON/planets.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-            System.out.println("njdsnfejgfjbsd");
-            String line;
-            int slotCount = 0;
-            boolean planetFound = false;
 
-            // Read the file line by line
-            while ((line = reader.readLine()) != null) {
-                // Check if the line contains the current planet
-                if (line.startsWith("/planet:") && line.contains(currentPlanet)) {
-                    planetFound = true;
-                    continue; // Skip to the next line after finding the current planet
-                }
 
-                if (planetFound) {
-                    // Check if the line contains the next planet delimiter
-                    if (line.equals("++++")) {
-                        break; // Stop reading after encountering the next planet delimiter
-                    }
 
-                    // Check if the line contains a slot information
-                    if (line.startsWith("/slot")) {
-                        slotCount++;
-                        System.out.println("anzahl slots "+slotCount);
-                    }
-                }
-            }
-
-            // Calculate the vertical gap between slots
-            double verticalGap = 15;
-
-            // Create instances of ShopView for each slot
-            for (int i = 1; i <= slotCount; i++) {
-                // Create ShopView instance
-                ImageView shopView = new ImageView("/graphics/png/shops/slots/upgrade_" + currentPlanet.toLowerCase() + i + ".gif");
-
-                // Calculate the vertical position of the shop view
-                double shopViewY = (i - 1) * (shopView.getBoundsInParent().getHeight() + verticalGap);
-
-                // Set the layout Y position
-                shopView.setLayoutY(shopViewY);
-
-                // Add the shop view to the root pane
-                System.out.println("jksfhkeshlf");
-                root.getChildren().add(shopView);
-            }
-
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     private void openShop() {
@@ -431,10 +383,52 @@ public class PlayerController {
         // Handle mouse click to close the shop
         shopView.setOnMouseClicked(e -> root.getChildren().remove(shopView));
 
-        openClassShop(pointCounter.count);
+        // Create the shop and pass the current points
+        currentPlanet = "earth";
+
+        // Call the method to open the shop from the text file
+        openShopFromTextFile(currentPlanet);
     }
 
+    int layoutX = 15;
+    private void openShopFromTextFile(String currentPlanet) {
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/JSON/planets.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
+            String line;
+            int slotCount = 0;
+            boolean planetFound = false;
+
+            // Read the file line by line
+            while ((line = reader.readLine()) != null) {
+                // Check if the line contains the current planet
+                if (line.startsWith("/planet:") && line.contains(currentPlanet)) {
+                    planetFound = true;
+                    continue; // Skip to the next line after finding the current planet
+                }
+
+                if (planetFound) {
+                    // Check if the line contains the next planet delimiter
+                    if (line.equals("++++")) {
+                        break; // Stop reading after encountering the next planet delimiter
+                    }
+
+                    // Check if the line contains a slot information
+                    if (line.startsWith("/slot")) {
+                        slotCount++;
+                        String img = "/graphics/png/shops/slots/upgrade" + slotCount +"_"+ currentPlanet + ".gif";
+
+                        openClassShop(pointCounter.count, layoutX, img);
+                        layoutX +=115;
+                    }
+                }
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
@@ -482,13 +476,11 @@ public class PlayerController {
     }
 
 
-    private void openClassShop(int currentPoints) {
-        // Create the shop and pass the current points
-       currentPlanet = "Earth";
+    private void openClassShop(int currentPoints, int layoutX, String img) {
 
-        // Call the method to open the shop from the text file
-        openShopFromTextFile(currentPlanet);
+        Shop shop = new Shop(currentPoints, layoutX, img);
 
-
+        // Add the shop views to the root pane
+        root.getChildren().addAll(shop.getShopViews());
     }
 }

@@ -14,14 +14,13 @@ public class Shop {
     private List<ImageView> shopViews = new ArrayList<>();
     private ImageView shopView;
 
-    private int layoutX = 15;
+    private int layoutX;
 
-    public Shop(int currentPoints) {
-        for (int i = 0; i < 4; i++) {
+    public Shop(int currentPoints, int layoutX, String img) {
+        this.layoutX = layoutX;
 
-        }
         // Load the shop image
-        Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shops/slots/shop_slot_main.png"));
+        Image shopImage = new Image(getClass().getResourceAsStream(img));
         shopView = new ImageView(shopImage);
 
         // Set size of the shop image
@@ -48,7 +47,7 @@ public class Shop {
 
         // Add shop view to the list
         shopViews.add(shopView);
-        layoutX += 15;
+
     }
 
 
