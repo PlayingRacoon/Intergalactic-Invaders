@@ -18,6 +18,7 @@ import javafx.util.Duration;
 import Module.SpawnWave;
 import Module.Shop;
 
+import java.io.*;
 import java.util.*;
 
 public class PlayerController {
@@ -53,6 +54,7 @@ public class PlayerController {
     private Map<ImageView, EnemyAttributes> enemyAttributesMap;
 
     private ArrayList<Laser> lasers = new ArrayList<>(); // ArrayList to hold Enemy objects
+    public String currentPlanet;
 
     // Method to set the enemy attributes list
     public void setEnemyAttributesList(List<EnemyAttributes> enemyAttributesList) {
@@ -71,6 +73,7 @@ public class PlayerController {
 
 
     }
+
 
     // Setter method for PointCounter
     public void setPointCounter(PointCounter pointCounter) {
@@ -232,7 +235,6 @@ public class PlayerController {
                     } catch (Exception e) {
                         System.out.println(" ");
                     }
-                    System.out.println("Laser collided with an enemy!");
                     return; // Exit loop after handling collision with the current enemy
                 }
             }
@@ -242,7 +244,7 @@ public class PlayerController {
 
 
     public void addPointsPerDefeat(int ENumber){
-        System.out.println("added points" + ENumber);
+
         switch (ENumber)
         {
             case 1: //melee
@@ -352,6 +354,62 @@ public class PlayerController {
     }
 
 
+    private void openShopFromTextFile(String currentPlanet) {
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/src/main/resources/JSON/planets.txt");
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            System.out.println("njdsnfejgfjbsd");
+            String line;
+            int slotCount = 0;
+            boolean planetFound = false;
+
+            // Read the file line by line
+            while ((line = reader.readLine()) != null) {
+                // Check if the line contains the current planet
+                if (line.startsWith("/planet:") && line.contains(currentPlanet)) {
+                    planetFound = true;
+                    continue; // Skip to the next line after finding the current planet
+                }
+
+                if (planetFound) {
+                    // Check if the line contains the next planet delimiter
+                    if (line.equals("++++")) {
+                        break; // Stop reading after encountering the next planet delimiter
+                    }
+
+                    // Check if the line contains a slot information
+                    if (line.startsWith("/slot")) {
+                        slotCount++;
+                        System.out.println("anzahl slots "+slotCount);
+                    }
+                }
+            }
+
+            // Calculate the vertical gap between slots
+            double verticalGap = 15;
+
+            // Create instances of ShopView for each slot
+            for (int i = 1; i <= slotCount; i++) {
+                // Create ShopView instance
+                ImageView shopView = new ImageView("/graphics/png/shops/slots/upgrade_" + currentPlanet.toLowerCase() + i + ".gif");
+
+                // Calculate the vertical position of the shop view
+                double shopViewY = (i - 1) * (shopView.getBoundsInParent().getHeight() + verticalGap);
+
+                // Set the layout Y position
+                shopView.setLayoutY(shopViewY);
+
+                // Add the shop view to the root pane
+                System.out.println("jksfhkeshlf");
+                root.getChildren().add(shopView);
+            }
+
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     private void openShop() {
@@ -423,11 +481,14 @@ public class PlayerController {
         }
     }
 
+
     private void openClassShop(int currentPoints) {
         // Create the shop and pass the current points
-        Shop shop = new Shop(pointCounter.count);
+       currentPlanet = "Earth";
 
-        // Display the shop
-        root.getChildren().add(shop.getShopView());
+        // Call the method to open the shop from the text file
+        openShopFromTextFile(currentPlanet);
+
+
     }
 }

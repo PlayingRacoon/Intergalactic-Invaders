@@ -17,6 +17,9 @@ public class Shop {
     private int layoutX = 15;
 
     public Shop(int currentPoints) {
+        for (int i = 0; i < 4; i++) {
+
+        }
         // Load the shop image
         Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shops/slots/shop_slot_main.png"));
         shopView = new ImageView(shopImage);
@@ -48,6 +51,7 @@ public class Shop {
         layoutX += 15;
     }
 
+
     public List<ImageView> getShopViews() {
         return shopViews;
     }
@@ -55,4 +59,5 @@ public class Shop {
         return shopView;
     }
 }
+
 
