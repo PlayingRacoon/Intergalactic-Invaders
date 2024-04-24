@@ -1,6 +1,7 @@
 package Module;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -10,9 +11,11 @@ import Controller.PlayerController;
 import Module.MainModule;
 import javafx.scene.paint.Color;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import Module.SpawnWave;
+import javafx.util.Duration;
 
 public class Spawner {
     private Pane root;
@@ -123,12 +126,60 @@ public class Spawner {
                 if (enemyView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
                     delete(enemyViews, enemyView);
                 }
+
+                if(enemyType.equals("ranged")||true) {
+                    PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+                    pause.play();
+                    createEnemyLaser(enemyView);
+                }
             }
         };
         enemyMovement.start();
     }
 
 
+    private void createEnemyLaser(ImageView enemyView) {
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+        pause.play();
+        ImageView laserView = new ImageView(new Image(getClass().getResourceAsStream(mainModule.laserImage)));
+
+        ArrayList<ImageView> enemyLaserViews=new ArrayList<>();
+
+        // Set laser position to be in front of the enemy
+        double laserX = enemyView.getLayoutX() - laserView.getImage().getWidth();
+        double laserY = enemyView.getLayoutY() + (enemyView.getBoundsInParent().getHeight() / 2) - (laserView.getImage().getHeight() / 2);
+
+        // Retrieve attributes from MainModule class
+        double laserSpeed = mainModule.laserSpeed;
+        int laserDamage = mainModule.laserDamage;
+
+        // Create laser attributes object
+        LaserAttributes laserAttributes = new LaserAttributes(laserSpeed, laserDamage, mainModule.laserType);
+        laserAttributesList.add(laserAttributes);
+
+        root.getChildren().add(laserView);
+
+        // Add the laser's ImageView to the list
+        enemyLaserViews.add(laserView);
+
+        // Sets the position of the laser
+        laserView.setLayoutX(laserX);
+        laserView.setLayoutY(laserY);
+
+        AnimationTimer laserMovement = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                double newX = laserView.getLayoutX() - 1.5; // Adjust speed as needed
+                laserView.setLayoutX(newX);
+
+                // Check if the laser touches or crosses the delete boundary
+                if (laserView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
+                    delete(laserViews, laserView);
+                }
+            }
+        };
+        laserMovement.start();
+    }
 
     private void delete(List<ImageView> enemyViews, ImageView enemyView) {
         root.getChildren().remove(enemyView);
@@ -174,7 +225,7 @@ public class Spawner {
             AnimationTimer laserMovement = new AnimationTimer() {
                 @Override
                 public void handle(long now) {
-                    double newX = laserView.getLayoutX() + 1; // Adjust speed as needed
+                    double newX = laserView.getLayoutX() + mainModule.laserSpeed; // Adjust speed as needed
                     laserView.setLayoutX(newX);
 
                     // Check if the laser touches or crosses the delete boundary

@@ -2,8 +2,10 @@ package Module;
 
 import Controller.PlayerController;
 import View.Screen;
+import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 import javax.sound.sampled.*;
 import java.io.*;
