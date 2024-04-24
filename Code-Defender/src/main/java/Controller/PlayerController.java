@@ -16,6 +16,7 @@ import Module.EnemyAttributes;
 import Module.Laser;
 import javafx.util.Duration;
 import Module.SpawnWave;
+import Module.Shop;
 
 import java.util.*;
 
@@ -44,6 +45,8 @@ public class PlayerController {
     private PointCounter pointCounter;
     private List<EnemyAttributes> enemyAttributesList;
     SpawnWave spawnWave = new SpawnWave();
+
+    private Stage primaryStage;
     boolean kal = false;
 
     private int bossKilled = 0;
@@ -269,7 +272,7 @@ public class PlayerController {
                 break;
 
         }
-
+        openShop();
         if (pointCounter.count >= pointCounter.tempSavePointNumber + 5000 && openNext != null)
         {
             if (openNext.equals("shop"))
@@ -357,9 +360,7 @@ public class PlayerController {
         double windowHeight = primaryScene.getHeight();
 
         // Load the shop image
-        Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shop.png"));
-
-        // Create an ImageView for the shop image
+        Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shops/shop.png"));
         ImageView shopView = new ImageView(shopImage);
 
         // Set the size of the ImageView to match the size of the window
@@ -371,6 +372,8 @@ public class PlayerController {
 
         // Handle mouse click to close the shop
         shopView.setOnMouseClicked(e -> root.getChildren().remove(shopView));
+
+        openClassShop(pointCounter.count);
     }
 
 
@@ -418,5 +421,13 @@ public class PlayerController {
             // Handle interrupted exception if necessary
             e.printStackTrace();
         }
+    }
+
+    private void openClassShop(int currentPoints) {
+        // Create the shop and pass the current points
+        Shop shop = new Shop(pointCounter.count);
+
+        // Display the shop
+        root.getChildren().add(shop.getShopView());
     }
 }

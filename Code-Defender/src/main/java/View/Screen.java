@@ -63,7 +63,7 @@ public class Screen extends Application {
 }
 
 private void openShop(Stage mainStage) {
-    Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shop.png"));
+    Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shops/shop.png"));
     ImageView shopView = new ImageView(shopImage);
     root.getChildren().add(shopView);
 
