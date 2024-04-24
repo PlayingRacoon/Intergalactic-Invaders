@@ -12,6 +12,8 @@ import java.util.List;
 
 public class Shop {
     private List<ImageView> shopViews = new ArrayList<>();
+    private List<ImageView> slotViews = new ArrayList<>();
+
     private ImageView shopView;
 
     private int layoutX;
@@ -24,7 +26,7 @@ public class Shop {
         shopView = new ImageView(shopImage);
 
         // Set size of the shop image
-        shopView.setFitWidth(1500); //set x
+        shopView.setFitWidth(1562); //set x
         shopView.setFitHeight(800); //set y
 
         // Set position of the shop image
@@ -48,6 +50,15 @@ public class Shop {
         // Add shop view to the list
         shopViews.add(shopView);
 
+    }
+    public void addSlotView(ImageView slotView) {
+        shopViews.add(slotView);
+        slotViews.add(slotView);
+    }
+
+    // Method to retrieve the list of slot views
+    public List<ImageView> getSlotViews() {
+        return slotViews;
     }
 
 

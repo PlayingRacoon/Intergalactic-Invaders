@@ -4,6 +4,7 @@ import Module.Enemy;
 import Module.MainModule;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -85,6 +86,7 @@ public class PlayerController {
     public void setSpawner(Spawner spawner) {
         this.spawner = spawner;
     }
+
     public void initializeEnemy(ImageView enemyView, double enemyX, double enemyY) {
         // Create and initialize the enemy
         Enemy enemy = new Enemy(mainModule.enemyView.getImage(), mainModule.enemySpeed, mainModule.enemyDamage, mainModule.enemyHitpoints, mainModule.chosenEnemy);
@@ -94,7 +96,6 @@ public class PlayerController {
         enemyView.setLayoutX(enemyX);
         enemyView.setLayoutY(enemyY);
     }
-
 
 
     public void start() {
@@ -181,11 +182,6 @@ public class PlayerController {
     }
 
 
-
-
-
-
-
     public void collisionsCheck(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator) {
         // Check if the enemy is within the visible area of the screen
 
@@ -217,7 +213,7 @@ public class PlayerController {
 
     public void collisionsCheckLaser(List<ImageView> enemyViews, ImageView enemyView, Iterator<Enemy> iterator) {
         // Check if the enemy is within the visible area of the screen
-        List<ImageView> laserViews=spawner.getLaserViews();
+        List<ImageView> laserViews = spawner.getLaserViews();
         for (ImageView laserV : laserViews) {
             // Check if the laser has already been removed
             if (!root.getChildren().contains(laserV)) {
@@ -244,11 +240,9 @@ public class PlayerController {
     }
 
 
+    public void addPointsPerDefeat(int ENumber) {
 
-    public void addPointsPerDefeat(int ENumber){
-
-        switch (ENumber)
-        {
+        switch (ENumber) {
             case 1: //melee
                 pointCounter.count += 100;
                 pointCounter.updateCounter();
@@ -276,13 +270,14 @@ public class PlayerController {
                 break;
 
         }
+
         killAllEnemies();
         spawner.keepSpawning = false;
-        openShop();
-        if (pointCounter.count >= pointCounter.tempSavePointNumber + 5000 && openNext != null)
-        {
-            if (openNext.equals("shop"))
-            {
+        currentPlanet = "earth";
+        openShopFromTextFile(currentPlanet);
+
+        if (pointCounter.count >= pointCounter.tempSavePointNumber + 5000 && openNext != null) {
+            if (openNext.equals("shop")) {
                 killAllEnemies();
                 spawner.keepSpawning = false;
                 //chosenEnemy = 11; mach enemy 1mal zum 11er boss
@@ -306,7 +301,7 @@ public class PlayerController {
         // Play explosion sound
         mainModule.playSound("explosion");
 
-        if (ENNumber == 11){
+        if (ENNumber == 11) {
 
             //open shop instead
             openShop();
@@ -358,19 +353,13 @@ public class PlayerController {
     }
 
 
-
-
-
-
-
-
     private void openShop() {
         // Retrieve the width and height of the primaryStage
         double windowWidth = primaryScene.getWidth();
         double windowHeight = primaryScene.getHeight();
 
         // Load the shop image
-        Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shops/shop.png"));
+        Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shops/shop_" + currentPlanet + ".png"));
         ImageView shopView = new ImageView(shopImage);
 
         // Set the size of the ImageView to match the size of the window
@@ -383,14 +372,11 @@ public class PlayerController {
         // Handle mouse click to close the shop
         shopView.setOnMouseClicked(e -> root.getChildren().remove(shopView));
 
-        // Create the shop and pass the current points
-        currentPlanet = "earth";
 
-        // Call the method to open the shop from the text file
-        openShopFromTextFile(currentPlanet);
     }
 
-    int layoutX = 15;
+    int layoutX = -100;
+
     private void openShopFromTextFile(String currentPlanet) {
         try {
             InputStream inputStream = getClass().getResourceAsStream("/JSON/planets.txt");
@@ -405,6 +391,7 @@ public class PlayerController {
                 // Check if the line contains the current planet
                 if (line.startsWith("/planet:") && line.contains(currentPlanet)) {
                     planetFound = true;
+                    openShop();
                     continue; // Skip to the next line after finding the current planet
                 }
 
@@ -414,13 +401,19 @@ public class PlayerController {
                         break; // Stop reading after encountering the next planet delimiter
                     }
 
+
                     // Check if the line contains a slot information
                     if (line.startsWith("/slot")) {
                         slotCount++;
-                        String img = "/graphics/png/shops/slots/upgrade" + slotCount +"_"+ currentPlanet + ".gif";
+                        if (slotCount == 5) //maximal 4 slots im shop
+                        {
+                            break;
+                        }
+                        String img = "/graphics/png/shops/slots/upgrade" + slotCount + "_" + currentPlanet + ".gif";
+                        System.out.println(slotCount);
 
-                        openClassShop(pointCounter.count, layoutX, img);
-                        layoutX +=115;
+                        openClassShop(pointCounter.count, layoutX, img, slotCount);
+                        layoutX += 88;
                     }
                 }
             }
@@ -429,7 +422,14 @@ public class PlayerController {
             e.printStackTrace();
         }
     }
-
+    private boolean slotAlreadyCreated(int layoutX) {
+        for (Node node : root.getChildren()) {
+            if (node instanceof ImageView && node.getLayoutX() == layoutX) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     // Setup for movement, DO NOT CHANGE!
@@ -476,10 +476,23 @@ public class PlayerController {
     }
 
 
-    private void openClassShop(int currentPoints, int layoutX, String img) {
-
+    private void openClassShop(int currentPoints, int layoutX, String img, int slotNumber) {
         Shop shop = new Shop(currentPoints, layoutX, img);
 
+        // Create and add slot view to the shop
+        ImageView slotView = new ImageView(new Image(getClass().getResourceAsStream(img)));
+        slotView.setLayoutX(layoutX);
+        slotView.setLayoutY(50); // Adjust Y position as needed
+        shop.addSlotView(slotView);
+
+        // Add event handling to the slot ImageView
+        slotView.setOnMouseClicked(e -> {
+            System.out.println("Slot " + slotNumber + " clicked!");
+            // Close the shop
+            root.getChildren().removeAll(shop.getShopViews());
+        });
+
+        System.out.println(shop.getShopViews());
         // Add the shop views to the root pane
         root.getChildren().addAll(shop.getShopViews());
     }
