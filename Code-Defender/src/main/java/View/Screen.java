@@ -57,19 +57,8 @@ public class Screen extends Application {
 
         // Pass the pointCounter to PlayerController
         playerController.setPointCounter(pointCounter);
-    
 
-      scene.setOnMouseClicked(e -> openShop(mainStage));
-}
-
-private void openShop(Stage mainStage) {
-    Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shops/shop.png"));
-    ImageView shopView = new ImageView(shopImage);
-    root.getChildren().add(shopView);
-
-    // Handle mouse click to close the shop
-    shopView.setOnMouseClicked(e -> root.getChildren().remove(shopView));
-}
+    }
 
     public static void main(String[] args) {
         launch();

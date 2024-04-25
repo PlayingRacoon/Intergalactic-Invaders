@@ -3,6 +3,7 @@ package Module;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -51,8 +52,9 @@ public class Shop {
         shopViews.add(shopView);
 
     }
+
+
     public void addSlotView(ImageView slotView) {
-        shopViews.add(slotView);
         slotViews.add(slotView);
     }
 

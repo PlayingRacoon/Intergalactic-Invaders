@@ -353,7 +353,7 @@ public class PlayerController {
     }
 
 
-    private void openShop() {
+    private ImageView openShop() {
         // Retrieve the width and height of the primaryStage
         double windowWidth = primaryScene.getWidth();
         double windowHeight = primaryScene.getHeight();
@@ -369,16 +369,15 @@ public class PlayerController {
         // Add the ImageView to the root pane
         root.getChildren().add(shopView);
 
-        // Handle mouse click to close the shop
-        shopView.setOnMouseClicked(e -> root.getChildren().remove(shopView));
-
-
+        return shopView;
     }
 
     int layoutX = -100;
 
     private void openShopFromTextFile(String currentPlanet) {
         try {
+            ImageView outerShopImage = new ImageView();
+
             InputStream inputStream = getClass().getResourceAsStream("/JSON/planets.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
@@ -391,7 +390,9 @@ public class PlayerController {
                 // Check if the line contains the current planet
                 if (line.startsWith("/planet:") && line.contains(currentPlanet)) {
                     planetFound = true;
-                    openShop();
+
+                    outerShopImage = openShop();
+
                     continue; // Skip to the next line after finding the current planet
                 }
 
@@ -412,8 +413,10 @@ public class PlayerController {
                         String img = "/graphics/png/shops/slots/upgrade" + slotCount + "_" + currentPlanet + ".gif";
                         System.out.println(slotCount);
 
-                        openClassShop(pointCounter.count, layoutX, img, slotCount);
-                        layoutX += 88;
+                        if (!slotAlreadyCreated(layoutX)) {
+                            openClassShop(pointCounter.count, layoutX, img, slotCount, outerShopImage);
+                        }
+                        layoutX += 100;
                     }
                 }
             }
@@ -424,7 +427,7 @@ public class PlayerController {
     }
     private boolean slotAlreadyCreated(int layoutX) {
         for (Node node : root.getChildren()) {
-            if (node instanceof ImageView && node.getLayoutX() == layoutX) {
+            if (node instanceof ImageView && node.getLayoutX() == layoutX && node.getLayoutY() == 50) {
                 return true;
             }
         }
@@ -476,24 +479,51 @@ public class PlayerController {
     }
 
 
-    private void openClassShop(int currentPoints, int layoutX, String img, int slotNumber) {
+    ArrayList<ImageView> test = new ArrayList<ImageView>();
+    public void addView(ImageView img)
+    {
+        test.add(img);
+        root.getChildren().add(img);
+        System.out.println("img"+img);
+    }
+
+    public void delView()
+    {
+        for (ImageView img : test) {
+            root.getChildren().remove(img);
+        }
+    }
+    int count = 0;
+    private void openClassShop(int currentPoints, int layoutX, String img, int slotNumber, ImageView outerShopView) {
         Shop shop = new Shop(currentPoints, layoutX, img);
 
         // Create and add slot view to the shop
         ImageView slotView = new ImageView(new Image(getClass().getResourceAsStream(img)));
-        slotView.setLayoutX(layoutX);
-        slotView.setLayoutY(50); // Adjust Y position as needed
+        slotView.setLayoutX(19);
+        slotView.setLayoutY(layoutX); // Adjust Y position as needed
+
+
+        slotView.setFitWidth(1562);
+        slotView.setFitHeight(800);
+
         shop.addSlotView(slotView);
 
         // Add event handling to the slot ImageView
         slotView.setOnMouseClicked(e -> {
             System.out.println("Slot " + slotNumber + " clicked!");
             // Close the shop
-            root.getChildren().removeAll(shop.getShopViews());
+            root.getChildren().removeAll(shop.getSlotViews());
+            root.getChildren().remove(outerShopView);
+            delView();
         });
 
-        System.out.println(shop.getShopViews());
-        // Add the shop views to the root pane
-        root.getChildren().addAll(shop.getShopViews());
+        count += 1;
+        
+        //because of addAll the arraylist always has size 1
+
+        for (ImageView sl : shop.getSlotViews()) {
+            addView(sl);
+        }
+        System.out.println("size"+shop.getSlotViews().size());
     }
 }
