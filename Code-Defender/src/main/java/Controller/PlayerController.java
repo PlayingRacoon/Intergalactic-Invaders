@@ -557,6 +557,35 @@ private Button shopButton;
     }
 
 
+    public String identifyShopItem(int slotNumber) {
+        String temp = " ";
+
+        switch (slotNumber)
+        {
+            case 1:
+                temp = "hull_upgrade";
+                break;
+
+            case 2:
+                temp = "shield_upgrade";
+                break;
+
+            case 3:
+                temp = "thruster_upgrade";
+                break;
+
+            case 4:
+                //undefined
+                temp = "undefined";
+                break;
+
+            case 5:
+                temp = "collsion_upgrade";
+                break;
+        }
+        return temp;
+    }
+
 
     ArrayList<ImageView> test = new ArrayList<ImageView>();
     public void addView(ImageView img)
@@ -578,7 +607,7 @@ private Button shopButton;
 
         // Create and add slot view to the shop
         ImageView slotView = new ImageView(new Image(getClass().getResourceAsStream(img)));
-        slotView.setLayoutX(19);
+        slotView.setLayoutX(-19);
         slotView.setLayoutY(layoutX); // Adjust Y position as needed
 
 
@@ -590,7 +619,7 @@ private Button shopButton;
         // Add event handling to the slot ImageView
         slotView.setOnMouseClicked(e -> {
 
-            System.out.println("Slot " + slotNumber + " clicked!");
+            System.out.println(identifyShopItem(slotNumber));
 
             //calls clicked shop to delete it
             root.getChildren().removeAll(shop.getSlotViews());
