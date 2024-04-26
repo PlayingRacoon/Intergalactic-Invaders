@@ -51,3 +51,27 @@ private void moveEnemies() {
 
 
 
+ ArrayList<Integer> existingSlots = new ArrayList<Integer>();
+    public void callSlot(int slotCount, ImageView outerShopImage)
+    {
+        int tempSlot = 0;
+        Random ran = new Random();
+           while (true) {
+               tempSlot = ran.nextInt(slotCount) + 1;
+
+               if (!existingSlots.contains(tempSlot))
+               {
+                   existingSlots.add(tempSlot);
+                   break;
+               }
+
+            System.out.println(tempSlot);
+            String img = "/graphics/png/shops/slots/upgrade" + tempSlot + "_" + currentPlanet + ".gif";
+            System.out.println("slotount; " + slotCount);
+
+            if (!slotAlreadyCreated(layoutX)) {
+                openClassShop(pointCounter.count, layoutX, img, slotCount, outerShopImage);
+            }
+            layoutX += 100;
+        }
+    }

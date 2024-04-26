@@ -374,9 +374,14 @@ public class PlayerController {
 
     int layoutX = -100;
 
+    Random random = new Random();
+    private int slotsCreated = 0;
+    private ArrayList<Integer> existingSlots = new ArrayList<Integer>();
+
     private void openShopFromTextFile(String currentPlanet) {
+
         try {
-            ImageView outerShopImage = new ImageView();
+            ImageView outerShopImage = null;
 
             InputStream inputStream = getClass().getResourceAsStream("/JSON/planets.txt");
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -399,30 +404,60 @@ public class PlayerController {
                 if (planetFound) {
                     // Check if the line contains the next planet delimiter
                     if (line.equals("++++")) {
+
                         break; // Stop reading after encountering the next planet delimiter
                     }
 
+                        // Check if the line contains the slot count
+                        if (line.startsWith("/slots:")) {
+                            slotCount = Integer.parseInt(line.substring("/slots:".length()).trim());
+
+                            // Call the callSlot method with the slot count
+                            callSlot(slotCount, outerShopImage);
+                            break; // Stop reading after obtaining the slot count
+                        }
 
                     // Check if the line contains a slot information
-                    if (line.startsWith("/slot")) {
-                        slotCount++;
-                        if (slotCount == 5) //maximal 4 slots im shop
-                        {
-                            break;
-                        }
-                        String img = "/graphics/png/shops/slots/upgrade" + slotCount + "_" + currentPlanet + ".gif";
-                        System.out.println(slotCount);
-
-                        if (!slotAlreadyCreated(layoutX)) {
-                            openClassShop(pointCounter.count, layoutX, img, slotCount, outerShopImage);
-                        }
-                        layoutX += 100;
-                    }
                 }
             }
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void callSlot(int slotCount, ImageView outerShopImage)
+    {
+        int tempSlot = 0;
+        Random ran = new Random();
+
+        boolean bool = true;
+        while (bool) {
+            while (true) {
+
+                if (existingSlots.size() > 3)
+                {
+                    bool = false;
+                    break;
+                }
+                tempSlot = ran.nextInt(slotCount) + 1;
+
+                if (existingSlots.contains(tempSlot)) {
+                    break;
+                } else {
+                    existingSlots.add(tempSlot);
+                }
+
+
+                System.out.println(tempSlot);
+                String img = "/graphics/png/shops/slots/upgrade" + tempSlot + "_" + currentPlanet + ".gif";
+                System.out.println("slotount; " + slotCount);
+
+                if (!slotAlreadyCreated(layoutX)) {
+                    openClassShop(pointCounter.count, layoutX, img, slotCount, outerShopImage);
+                }
+                layoutX += 100;
+            }
         }
     }
     private boolean slotAlreadyCreated(int layoutX) {
@@ -518,7 +553,7 @@ public class PlayerController {
         });
 
         count += 1;
-        
+
         //because of addAll the arraylist always has size 1
 
         for (ImageView sl : shop.getSlotViews()) {

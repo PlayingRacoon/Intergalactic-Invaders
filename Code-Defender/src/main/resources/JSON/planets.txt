@@ -1,6 +1,8 @@
 /planet:earth
 /backround: ...
 /shopType: ...
+/slots:5
+/slot:
 /slot:
 /slot:
 /slot:
