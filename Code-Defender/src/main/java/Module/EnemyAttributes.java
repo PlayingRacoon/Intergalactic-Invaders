@@ -6,6 +6,7 @@ public class EnemyAttributes {
     private int hitpoints;
     private String type;
     private int enemyNumber;
+    private long timer=System.nanoTime();
 
     public EnemyAttributes(double speed, int damage, int hitpoints, String type, int enemyNumber) {
         this.speed = speed;
@@ -34,6 +35,14 @@ public class EnemyAttributes {
 
     public int getEnemyNumber() {
         return enemyNumber;
+    }
+
+    public long getTimer() {
+        return timer;
+    }
+
+    public void setTimer(long timer) {
+        this.timer = timer;
     }
 }
 

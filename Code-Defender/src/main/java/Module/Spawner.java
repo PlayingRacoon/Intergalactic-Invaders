@@ -80,6 +80,8 @@ public class Spawner {
         spawnerTimer.start();
     }
 
+    private long lastEnemyLaserFireTime = 0;
+
     private void spawnEnemy() {
             // Create a new ImageView for the enemy
         spawnWave.spawnChoosenEnemy();
@@ -126,10 +128,7 @@ public class Spawner {
                 if (enemyView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
                     delete(enemyViews, enemyView);
                 }
-
                 if(enemyType.equals("ranged")||true) {
-                    PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-                    pause.play();
                     createEnemyLaser(enemyView);
                 }
             }
@@ -139,8 +138,6 @@ public class Spawner {
 
 
     private void createEnemyLaser(ImageView enemyView) {
-        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
-        pause.play();
         ImageView laserView = new ImageView(new Image(getClass().getResourceAsStream(mainModule.laserImage)));
 
         ArrayList<ImageView> enemyLaserViews=new ArrayList<>();
