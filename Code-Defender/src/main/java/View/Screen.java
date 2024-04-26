@@ -55,6 +55,13 @@ public class Screen extends Application {
         PointCounter pointCounter = new PointCounter(root);
         pointCounter.setDisplayCounter(true); // Set to true to display the counter
 
+        PointCounter shopCounter = new PointCounter(root);
+        shopCounter.setDisplayCounter(true);
+        double labelX = root.getWidth() - 200; // Adjust X position as needed
+        double labelY = root.getHeight() / 2; // Adjust Y position as needed
+        AnchorPane.setLeftAnchor(shopCounter.counterLabel, labelX);
+        AnchorPane.setTopAnchor(shopCounter.counterLabel, labelY);
+
         // Pass the pointCounter to PlayerController
         playerController.setPointCounter(pointCounter);
 

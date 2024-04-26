@@ -6,6 +6,7 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
@@ -56,6 +57,7 @@ public class PlayerController {
 
     private ArrayList<Laser> lasers = new ArrayList<>(); // ArrayList to hold Enemy objects
     public String currentPlanet;
+    public boolean shopOpen = false;
 
     // Method to set the enemy attributes list
     public void setEnemyAttributesList(List<EnemyAttributes> enemyAttributesList) {
@@ -352,11 +354,12 @@ public class PlayerController {
         enemies.remove(enemyView);
     }
 
-
+private Button shopButton;
     private ImageView openShop() {
         // Retrieve the width and height of the primaryStage
         double windowWidth = primaryScene.getWidth();
         double windowHeight = primaryScene.getHeight();
+
 
         // Load the shop image
         Image shopImage = new Image(getClass().getResourceAsStream("/graphics/png/shops/shop_" + currentPlanet + ".png"));
@@ -368,6 +371,40 @@ public class PlayerController {
 
         // Add the ImageView to the root pane
         root.getChildren().add(shopView);
+
+        // Create a Button for the shop
+        Button shopButton = new Button();
+
+        // Load the button image
+        Image buttonImage = new Image(getClass().getResourceAsStream("/graphics/png/shops/shopButton.gif"));
+        ImageView buttonImageView = new ImageView(buttonImage);
+
+        // Set the graphic of the button
+        shopButton.setGraphic(buttonImageView);
+
+        // Set the size of the button (adjust as needed)
+
+
+        // Position the button in the top-right corner of the shop image
+        double buttonX = sceneWidth / 2 + 490;
+        double buttonY = sceneHeight / 2 + 40; // Adjust X position as needed
+        shopButton.setLayoutX(buttonX);
+        shopButton.setLayoutY(buttonY);
+
+        ImageView outerShopView = shopView;
+        // Add event handling to the button
+        shopButton.setOnAction(e -> {
+            System.out.println("Button clicked!");
+            root.getChildren().remove(shopButton);
+
+            root.getChildren().remove(outerShopView);
+            delView();
+        });
+
+
+
+        // Add the button to the root pane
+        root.getChildren().add(shopButton);
 
         return shopView;
     }
@@ -426,6 +463,8 @@ public class PlayerController {
         }
     }
 
+
+
     public void callSlot(int slotCount, ImageView outerShopImage)
     {
         int tempSlot = 0;
@@ -445,16 +484,19 @@ public class PlayerController {
                 if (existingSlots.contains(tempSlot)) {
                     break;
                 } else {
+                    System.out.println("slotount; " + tempSlot);
+
                     existingSlots.add(tempSlot);
                 }
 
 
                 System.out.println(tempSlot);
                 String img = "/graphics/png/shops/slots/upgrade" + tempSlot + "_" + currentPlanet + ".gif";
-                System.out.println("slotount; " + slotCount);
+
+
 
                 if (!slotAlreadyCreated(layoutX)) {
-                    openClassShop(pointCounter.count, layoutX, img, slotCount, outerShopImage);
+                    openClassShop(pointCounter.count, layoutX, img, tempSlot, outerShopImage);
                 }
                 layoutX += 100;
             }
@@ -473,10 +515,11 @@ public class PlayerController {
     // Setup for movement, DO NOT CHANGE!
     private void movementSetup() {
 
-        primaryScene.setOnKeyPressed(e -> {
-            KeyCode code = e.getCode();
-            if (e.getCode().toString().equals("SPACE")) {
+        primaryScene.setOnKeyPressed(a -> {
+            KeyCode code = a.getCode();
+            if (a.getCode().toString().equals("SPACE")) {
                 spawner.spawnLaser();
+                a.consume();
             }
             if (code == KeyCode.W) wPressed = true;
             else if (code == KeyCode.S) sPressed = true;
@@ -514,6 +557,7 @@ public class PlayerController {
     }
 
 
+
     ArrayList<ImageView> test = new ArrayList<ImageView>();
     public void addView(ImageView img)
     {
@@ -545,11 +589,12 @@ public class PlayerController {
 
         // Add event handling to the slot ImageView
         slotView.setOnMouseClicked(e -> {
+
             System.out.println("Slot " + slotNumber + " clicked!");
-            // Close the shop
+
+            //calls clicked shop to delete it
             root.getChildren().removeAll(shop.getSlotViews());
-            root.getChildren().remove(outerShopView);
-            delView();
+
         });
 
         count += 1;

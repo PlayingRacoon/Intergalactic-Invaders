@@ -11,7 +11,7 @@ public class PointCounter {
     public int count;
     public boolean displayCounter;
 
-    private Label counterLabel;
+    public Label counterLabel;
     private AnchorPane root;
 
     public int tempSavePointNumber = 0;
