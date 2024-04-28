@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.scene.image.ImageView;
@@ -277,6 +278,7 @@ public class PlayerController {
         spawner.keepSpawning = false;
         currentPlanet = "earth";
         openShopFromTextFile(currentPlanet);
+        shopCounter.setDisplayCounter(true);
 
         if (pointCounter.count >= pointCounter.tempSavePointNumber + 5000 && openNext != null) {
             if (openNext.equals("shop")) {
@@ -398,6 +400,7 @@ private Button shopButton;
             root.getChildren().remove(shopButton);
 
             root.getChildren().remove(outerShopView);
+            shopCounter.setDisplayCounter(false);
             delView();
         });
 
@@ -407,6 +410,20 @@ private Button shopButton;
         root.getChildren().add(shopButton);
 
         return shopView;
+    }
+
+    public PointCounter shopCounter;
+    public void shopPointCounter(AnchorPane root){
+        shopCounter = new PointCounter(root);
+        shopCounter.setDisplayCounter(false);
+        double labelX = root.getWidth() - 260; // Adjust X position as needed
+        double labelY = root.getHeight() / 3 + 34; // Adjust Y position as needed
+        AnchorPane.setLeftAnchor(shopCounter.counterLabel, labelX);
+        AnchorPane.setTopAnchor(shopCounter.counterLabel, labelY);
+
+        shopCounter.count = pointCounter.count;
+        shopCounter.updateCounter();
+        shopCounter.counterLabel.toFront();
     }
 
     int layoutX = -100;
@@ -498,7 +515,7 @@ private Button shopButton;
                 if (!slotAlreadyCreated(layoutX)) {
                     openClassShop(pointCounter.count, layoutX, img, tempSlot, outerShopImage);
                 }
-                layoutX += 100;
+                layoutX += 95;
             }
         }
     }
