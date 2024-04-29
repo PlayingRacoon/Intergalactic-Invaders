@@ -4,6 +4,7 @@ while aliens can fight in either ships 50x50 -> 75x75 or even 100 or 120 for bos
 they can also fight withour ships 25x25
 
 the backround is 1920 x 1080 and the smaller ones are the same but:4
+480 x 270
 shift o for the 3d effect on t text
 
 enemy types:
