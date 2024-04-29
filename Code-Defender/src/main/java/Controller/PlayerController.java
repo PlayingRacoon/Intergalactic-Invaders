@@ -508,7 +508,7 @@ private Button shopButton;
 
 
                 System.out.println(tempSlot);
-                String img = "/graphics/png/shops/slots/upgrade" + tempSlot + "_" + currentPlanet + ".gif";
+                String img = "/graphics/png/shops/slots/" + currentPlanet + "/upgrade" + tempSlot + ".gif";
 
 
 
@@ -577,28 +577,24 @@ private Button shopButton;
     public String identifyShopItem(int slotNumber) {
         String temp = " ";
 
-        switch (slotNumber)
-        {
-            case 1:
-                temp = "hull_upgrade";
-                break;
+        switch (currentPlanet) {
+            case "earth":
+            switch (slotNumber) {
+                case 1:
+                    temp = "hull_upgrade";
+                    break;
 
-            case 2:
-                temp = "shield_upgrade";
-                break;
+                case 2:
+                    temp = "thruster_upgrade";
+                    break;
 
-            case 3:
-                temp = "thruster_upgrade";
-                break;
+                case 3:
+                    temp = "laser_upgrade";
+            }
+            break;
 
-            case 4:
-                //undefined
-                temp = "undefined";
-                break;
-
-            case 5:
-                temp = "collsion_upgrade";
-                break;
+            case "":
+            break;
         }
         return temp;
     }
