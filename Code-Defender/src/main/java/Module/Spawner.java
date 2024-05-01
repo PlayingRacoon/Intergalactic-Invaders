@@ -80,19 +80,20 @@ public class Spawner {
         spawnerTimer.start();
     }
 
-    private long lastEnemyLaserFireTime = 0;
+    private Map<ImageView, Long> lastEnemyLaserFireTimes = new HashMap<>();
+    private final long LASER_INTERVAL = 1_500_000_000; // 1.5 seconds in nanoseconds
 
     private void spawnEnemy() {
-            // Create a new ImageView for the enemy
+        // Create a new ImageView for the enemy
         spawnWave.spawnChoosenEnemy();
         mainModule.loadEnemyAttributes(spawnWave.chosenEnemy);
-            ImageView enemyView = new ImageView();
+        ImageView enemyView = new ImageView();
 
-            // Load the enemy image from the file path
-            Image enemyImage = new Image(getClass().getResourceAsStream(mainModule.enemyImage));
+        // Load the enemy image from the file path
+        Image enemyImage = new Image(getClass().getResourceAsStream(mainModule.enemyImage));
 
-            // Set the loaded image to the enemy ImageView
-            enemyView.setImage(enemyImage);
+        // Set the loaded image to the enemy ImageView
+        enemyView.setImage(enemyImage);
         double enemyX = primaryStage.getWidth(); // Spawn at the right edge of the screen
         double enemyY = Math.random() * (primaryStage.getHeight() - enemyView.getImage().getHeight());
 
@@ -100,10 +101,10 @@ public class Spawner {
         enemyY = Math.min(enemyY, primaryStage.getHeight() - enemyView.getImage().getHeight()); // Ensure enemy is not spawned below the screen
 
         // Retrieve attributes from MainModule class
+        String enemyType = mainModule.enemyType; // Get the loaded enemy type
         double enemySpeed = mainModule.enemySpeed;
         int enemyDamage = mainModule.enemyDamage;
         int enemyHitpoints = mainModule.enemyHitpoints;
-        String enemyType = String.valueOf(mainModule.chosenEnemy);
         int enemyNumber = spawnWave.chosenEnemy;
 
         // Create enemy attributes object
@@ -128,13 +129,22 @@ public class Spawner {
                 if (enemyView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
                     delete(enemyViews, enemyView);
                 }
-                if(enemyType.equals("ranged")||true) {
-                    createEnemyLaser(enemyView);
+
+                // Check if the enemy is of type "ranged" to allow shooting
+                if (enemyType.equals("ranged")) {
+                    if (!lastEnemyLaserFireTimes.containsKey(enemyView) || now - lastEnemyLaserFireTimes.get(enemyView) >= LASER_INTERVAL) {
+                        createEnemyLaser(enemyView);
+                        lastEnemyLaserFireTimes.put(enemyView, now); // Update the last laser shot time for this enemy
+                    }
                 }
             }
         };
         enemyMovement.start();
+
+        // Initialize the last laser shot time for this enemy
+        lastEnemyLaserFireTimes.put(enemyView, System.nanoTime());
     }
+
 
 
     private void createEnemyLaser(ImageView enemyView) {
