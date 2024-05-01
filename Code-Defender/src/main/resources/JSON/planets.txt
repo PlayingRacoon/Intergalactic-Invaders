@@ -1,12 +1,7 @@
 /planet:earth
 /backround: ...
 /shopType: ...
-/slots:5
-/slot:
-/slot:
-/slot:
-/slot:
-/slot:
+/slots:3
 ++++
 /planet:sargasso
 /backround: ...

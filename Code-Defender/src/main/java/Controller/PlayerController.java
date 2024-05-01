@@ -277,8 +277,9 @@ public class PlayerController {
         killAllEnemies();
         spawner.keepSpawning = false;
         currentPlanet = "earth";
-        openShopFromTextFile(currentPlanet);
-        shopCounter.setDisplayCounter(true);
+        //openShopFromTextFile(currentPlanet);
+        //shopCounter.setDisplayCounter(true);
+        openStarMap();
 
         if (pointCounter.count >= pointCounter.tempSavePointNumber + 5000 && openNext != null) {
             if (openNext.equals("shop")) {
@@ -293,6 +294,12 @@ public class PlayerController {
             pointCounter.tempSavePointNumber = pointCounter.count;
         }
 
+    }
+
+    private void openStarMap() {
+        StarMap starMap = new StarMap(root, sceneWidth, sceneHeight);
+        // You might want to keep a reference to the StarMap object if you need to remove it later
+        // e.g., this.starMap = starMap;
     }
 
     public void killAllEnemies() {
@@ -489,9 +496,10 @@ private Button shopButton;
 
         boolean bool = true;
         while (bool) {
+
             while (true) {
 
-                if (existingSlots.size() > 3)
+                if (existingSlots.size() > 3 || existingSlots.size() == slotCount)
                 {
                     bool = false;
                     break;
