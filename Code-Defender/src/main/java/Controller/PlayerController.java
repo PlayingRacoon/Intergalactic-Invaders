@@ -2,6 +2,7 @@ package Controller;
 
 import Module.Enemy;
 import Module.MainModule;
+import View.Screen;
 import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.scene.Node;
@@ -59,6 +60,8 @@ public class PlayerController {
     private ArrayList<Laser> lasers = new ArrayList<>(); // ArrayList to hold Enemy objects
     public String currentPlanet;
     public boolean shopOpen = false;
+    Screen screen;
+
 
     // Method to set the enemy attributes list
     public void setEnemyAttributesList(List<EnemyAttributes> enemyAttributesList) {
@@ -66,7 +69,7 @@ public class PlayerController {
     }
 
     // Constructor
-    public PlayerController(Stage primaryStage, MainModule mainModule, Spawner spawner, Pane root) {
+    public PlayerController(Stage primaryStage, MainModule mainModule, Spawner spawner, Pane root, Screen screen) {
         this.mainModule = mainModule;
         this.primaryScene = primaryStage.getScene();
         this.spawner = spawner;
@@ -74,7 +77,7 @@ public class PlayerController {
         initialize();
         this.root = root;
         this.pointCounter = null;
-
+        this.screen = screen;
 
     }
 
@@ -104,6 +107,9 @@ public class PlayerController {
     public void start() {
         mainModule.playerView.setLayoutY(240);
         mainModule.playerView.setLayoutX(2);
+
+        screen.setBackgroundImage("/graphics/png/backrounds/earth.png");
+        PlayerTofront();
 
         AnimationTimer timer = new AnimationTimer() {
             @Override
@@ -277,6 +283,7 @@ public class PlayerController {
         killAllEnemies();
         spawner.keepSpawning = false;
         currentPlanet = "earth";
+        mainModule.curPlanet = currentPlanet;
         //openShopFromTextFile(currentPlanet);
         //shopCounter.setDisplayCounter(true);
         openStarMap();
@@ -297,17 +304,20 @@ public class PlayerController {
     }
 
     private void openStarMap() {
-        StarMap starMap = new StarMap(root, sceneWidth, sceneHeight, this); // i love that, THIS!
+        StarMap starMap = new StarMap(root, sceneWidth, sceneHeight, this, screen); // i love that, THIS!
         // You might want to keep a reference to the StarMap object if you need to remove it later
         // e.g., this.starMap = starMap;
     }
 
     public void changePlayerImage(String imagePath) {
+        screen.backgroundImage = null;
+        screen.backgroundView = null;
         Image newPlayerImage = new Image(getClass().getResourceAsStream(imagePath));
         mainModule.playerView.setImage(newPlayerImage);
+
     }
 
-    public String evaluateCurrentPlanet(int PlanetNumber)
+    public void evaluateCurrentPlanet(int PlanetNumber)
     {
         String temp = " ";
 
@@ -354,8 +364,15 @@ public class PlayerController {
                 break;
         }
 
-        return temp;
+        currentPlanet = temp;
+        mainModule.curPlanet = temp;
     }
+
+    public void PlayerTofront()
+    {
+        mainModule.playerView.toFront();
+    }
+
 
 
 

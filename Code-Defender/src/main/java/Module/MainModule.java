@@ -6,6 +6,7 @@ import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import Controller.PlayerController;
 
 import javax.sound.sampled.*;
 import java.io.*;
@@ -20,6 +21,8 @@ public class MainModule {
     public ImageView laserView;
     private Laser laser; // Assuming Laser class exists
     public String pathToPlayer = "/graphics/png/player/SpaceShip.gif";
+
+    public String curPlanet = "earth";
 
 
     public int chosenEnemy = 5; // number of the enemy that gets chosen from 1 to ....
@@ -65,7 +68,7 @@ public class MainModule {
     private static String EXPLOSION_SOUND_PATH = " ";
 
     public void loadEnemyAttributes(int chosenEnemy) {
-        try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + ENEMY_FILE_PATH);
+        try (InputStream inputStream = getClass().getResourceAsStream("/JSON/" + curPlanet + "_" + ENEMY_FILE_PATH);
              BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
             Map<String, String> currentEnemyData = new HashMap<>();
@@ -102,7 +105,7 @@ public class MainModule {
             // Check if the chosen enemy exists in the loaded data
             if (allEnemiesData.containsKey(chosenEnemy)) {
                 Map<String, String> chosenEnemyData = allEnemiesData.get(chosenEnemy);
-                enemyImage = "/graphics/png/enemies/" + chosenEnemyData.getOrDefault("/image", "");
+                enemyImage = "/graphics/png/enemies/"+ curPlanet +"/"+ chosenEnemyData.getOrDefault("/image", "");
                 enemyType = chosenEnemyData.getOrDefault("/type", "");
                 enemySpeed = Double.parseDouble(chosenEnemyData.getOrDefault("/speed", "0.0"));
                 enemyDamage = Integer.parseInt(chosenEnemyData.getOrDefault("/damage", "0"));

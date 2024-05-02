@@ -1,5 +1,6 @@
 package Controller;
 
+import View.Screen;
 import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,17 +20,20 @@ public class StarMap {
     private ImageView backgroundView;
     private HashMap<ImageView, Integer> planetNumberMap = new HashMap<>();
     private final double PLANET_SIZE_MULTIPLIER = 50; // Adjust this multiplier as needed
+    Screen screen;
 
 
     private PlayerController playerController;
 
-    public StarMap(Pane root, double screenWidth, double screenHeight, PlayerController playerController) {
+    public StarMap(Pane root, double screenWidth, double screenHeight, PlayerController playerController, Screen screen) {
         this.playerController = playerController;
         this.root = root;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
         initializeBackground();
         initializePlanets();
+        this.screen = screen;
+
     }
 
     private void initializeBackground() {
@@ -93,19 +97,25 @@ public class StarMap {
 
         // Add event handler for clicking the planet
         planetView.setOnMouseClicked(event -> {
+
             System.out.println("Planet " + planetNumber + " clicked!");
             String playerImagePath = "/graphics/png/player/FTL.gif";
             playerController.changePlayerImage(playerImagePath);
 
-            PauseTransition pause = new PauseTransition(Duration.seconds(1.4));
+            PauseTransition pause = new PauseTransition(Duration.seconds(1));
             String originImagePlayer = "/graphics/png/player/SpaceShip.gif";
-            pause.setOnFinished(e -> playerController.changePlayerImage(originImagePlayer));
+            pause.setOnFinished(e -> {
+                playerController.changePlayerImage(originImagePlayer);
+                String tempBck = "/graphics/png/backrounds/" + playerController.currentPlanet + ".png";
 
-            playerController.currentPlanet = playerController.evaluateCurrentPlanet(planetNumber);
+                screen.setBackgroundImage(tempBck);
+                playerController.PlayerTofront();
+            });
+            playerController.evaluateCurrentPlanet(planetNumber);
+
 
             pause.play();
             remove();
-            System.out.println(playerController.currentPlanet);
         });
 
         // Add the planet to the root and to the list of planet views
@@ -120,6 +130,13 @@ public class StarMap {
         root.getChildren().removeAll(backgroundView);
         root.getChildren().removeAll(planetViews);
     }
+
+
+    public void changeBackgroundImage(String imagePath) {
+        Image newBackgroundImage = new Image(getClass().getResourceAsStream(imagePath));
+        backgroundView.setImage(newBackgroundImage);
+    }
+
 
     public HashMap<ImageView, Integer> getPlanetNumberMap() {
         return planetNumberMap;

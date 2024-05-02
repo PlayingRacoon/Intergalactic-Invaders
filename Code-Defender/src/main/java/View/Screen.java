@@ -18,15 +18,55 @@ import Module.PointCounter;
 
 public class Screen extends Application {
     AnchorPane root = new AnchorPane();
+    public Image backgroundImage;
+    public ImageView backgroundView;
+
+    public void initialize(AnchorPane root) {
+        this.root = root;
+        this.backgroundView = new ImageView();
+        root.getChildren().add(backgroundView);
+
+    }
+
+    public void setBackgroundImage(String imagePath) {
+
+            root.getChildren().remove(backgroundView);
+            root.getChildren().remove(backgroundImage);
+
+            backgroundView = null;
+            backgroundImage = null;
+
+
+        // Load the new background image
+        Image newBackgroundImage = new Image(getClass().getResourceAsStream(imagePath));
+
+        // Create a new ImageView with the new background image
+        ImageView newBackgroundView = new ImageView(newBackgroundImage);
+
+        // Set the size to match the root pane
+        newBackgroundView.setFitWidth(root.getWidth());
+        newBackgroundView.setFitHeight(root.getHeight());
+
+        // Replace the old background with the new one
+        root.getChildren().remove(backgroundView); // Remove the old background
+        root.getChildren().add(newBackgroundView); // Add the new background
+
+        backgroundView = newBackgroundView; // Update the reference to the background
+
+
+        backgroundView.toFront();
+    }
 
     @Override
     public void start(Stage mainStage) throws Exception {
         mainStage.setTitle("Code Defender");
 
         // Set background image
-        Image backgroundImage = new Image(getClass().getResourceAsStream("/graphics/png/backrounds/earth.png"));
-        ImageView backgroundView = new ImageView(backgroundImage);
-        root.getChildren().add(backgroundView);
+        backgroundImage = new Image(getClass().getResourceAsStream("/graphics/png/backrounds/earth.png"));
+        backgroundView = new ImageView(backgroundImage);
+
+        initialize(root);
+
 
         MainModule mainModule = new MainModule(mainStage.getWidth(), mainStage.getHeight()); // Pass stage dimensions
         root.getChildren().add(mainModule.playerView);
@@ -44,7 +84,7 @@ public class Screen extends Application {
 
         // Initialize Spawner before PlayerController
         // Initialize PlayerController after scene creation
-        PlayerController playerController = new PlayerController(mainStage, mainModule, null, root);
+        PlayerController playerController = new PlayerController(mainStage, mainModule, null, root, this);
         playerController.start();
 
         // Initialize and start the Spawner after PlayerController initialization
