@@ -19,6 +19,7 @@ public class MainModule {
 
     public ImageView laserView;
     private Laser laser; // Assuming Laser class exists
+    public String pathToPlayer = "/graphics/png/player/SpaceShip.gif";
 
 
     public int chosenEnemy = 5; // number of the enemy that gets chosen from 1 to ....
@@ -26,7 +27,7 @@ public class MainModule {
     public int chosenLaser = 1; // number of the laser that gets chosen from 1 to ....
 
     public MainModule(double stageWidth, double stageHeight) {
-        playerView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/player/SpaceShip.gif")));
+        playerView = new ImageView(new Image(getClass().getResourceAsStream(pathToPlayer)));
         loadEnemyAttributes(chosenEnemy);
         if (enemyImage != null) {
             enemyView = new ImageView(new Image(getClass().getResourceAsStream(enemyImage)));

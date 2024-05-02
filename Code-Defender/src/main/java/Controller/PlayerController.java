@@ -297,10 +297,67 @@ public class PlayerController {
     }
 
     private void openStarMap() {
-        StarMap starMap = new StarMap(root, sceneWidth, sceneHeight);
+        StarMap starMap = new StarMap(root, sceneWidth, sceneHeight, this); // i love that, THIS!
         // You might want to keep a reference to the StarMap object if you need to remove it later
         // e.g., this.starMap = starMap;
     }
+
+    public void changePlayerImage(String imagePath) {
+        Image newPlayerImage = new Image(getClass().getResourceAsStream(imagePath));
+        mainModule.playerView.setImage(newPlayerImage);
+    }
+
+    public String evaluateCurrentPlanet(int PlanetNumber)
+    {
+        String temp = " ";
+
+        switch (PlanetNumber)
+        {
+            case 1:
+                temp = "earth";
+                break;
+
+            case 2:
+                temp = "birmingham";
+            break;
+
+            case 3:
+                temp = "insulam-118";
+                break;
+
+            case 4:
+                temp = "kepler-22b";
+                break;
+
+            case 5:
+                temp = "kepler-89c";
+                break;
+
+            case 6:
+                temp = "mons-25";
+                break;
+
+            case 7:
+                temp = "palus-445";
+                break;
+
+            case 8:
+                temp = "proxima_centauri_b";
+                break;
+
+            case 9:
+                temp = "sargasso";
+                break;
+
+            case 10:
+                temp = "silva-114";
+                break;
+        }
+
+        return temp;
+    }
+
+
 
     public void killAllEnemies() {
         kal = true;

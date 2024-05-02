@@ -1,12 +1,15 @@
 package Controller;
 
+import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+import Module.MainModule;
+import javafx.util.Duration;
 
 public class StarMap {
     private Pane root;
@@ -14,8 +17,14 @@ public class StarMap {
     private double screenHeight;
     private List<ImageView> planetViews = new ArrayList<>();
     private ImageView backgroundView;
+    private HashMap<ImageView, Integer> planetNumberMap = new HashMap<>();
+    private final double PLANET_SIZE_MULTIPLIER = 50; // Adjust this multiplier as needed
 
-    public StarMap(Pane root, double screenWidth, double screenHeight) {
+
+    private PlayerController playerController;
+
+    public StarMap(Pane root, double screenWidth, double screenHeight, PlayerController playerController) {
+        this.playerController = playerController;
         this.root = root;
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -24,7 +33,7 @@ public class StarMap {
     }
 
     private void initializeBackground() {
-        Image backgroundImage = new Image(getClass().getResourceAsStream("/graphics/png/shops/shop.png"));
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/graphics/png/planets/backround.png"));
         backgroundView = new ImageView(backgroundImage);
         backgroundView.setFitWidth(screenWidth);
         backgroundView.setFitHeight(screenHeight);
@@ -32,40 +41,87 @@ public class StarMap {
     }
 
     private void initializePlanets() {
-        int planetCount = 10;
-        double middleX = screenWidth / 2;
-        double middleY = screenHeight / 2;
+        // Define the positions and relative sizes for each planet
+        double[][] planetData = {
+                // {x, y, sizeMultiplier}
+                {320, 300, 1}, // planet 1...
+                {380, 470, 2}, //planet 2...
+                {580, 150, 2.2}, //etc...
+                {670, 450, 1.3},
+                {850, 550, 1.3},
+                {810, 240, 1.25},
+                {1000, 180, 1.8},
+                {1100, 520, 2.3},
+                {220, 440, 1.1},
+                {970, 370, 1.1},
+        };
 
-        double middleWidth = 960; // Width of the middle area
-        double middleHeight = 540; // Height of the middle area
-
-        Random random = new Random();
-        for (int i = 1; i <= planetCount; i++) {
-            String planetImagePath = "/graphics/png/planets/planet" + i + ".png";
-            Image planetImage = new Image(getClass().getResourceAsStream(planetImagePath));
-            ImageView planetView = new ImageView(planetImage);
-
-            // Randomly position the planet within the middle area of the screen
-            double planetSize = random.nextDouble() * 50 + 50; // Random size between 30 and 80
-            double minX = middleX - middleWidth / 2 + planetSize / 2;
-            double maxX = middleX + middleWidth / 2 - planetSize / 2;
-            double minY = middleY - middleHeight / 2 + planetSize / 2;
-            double maxY = middleY + middleHeight / 2 - planetSize / 2;
-            double planetX = random.nextDouble() * (maxX - minX) + minX;
-            double planetY = random.nextDouble() * (maxY - minY) + minY;
-
-            planetView.setFitWidth(planetSize);
-            planetView.setFitHeight(planetSize);
-            planetView.setLayoutX(planetX);
-            planetView.setLayoutY(planetY);
-
-            planetViews.add(planetView);
-            root.getChildren().add(planetView);
+        for (int i = 0; i < planetData.length; i++) {
+            double planetX = planetData[i][0];
+            double planetY = planetData[i][1];
+            double sizeMultiplier = planetData[i][2];
+            createPlanet(i + 1, planetX, planetY, sizeMultiplier);
         }
+    }
+
+    private void createPlanet(int planetNumber, double planetX, double planetY, double sizeMultiplier) {
+        String planetImagePath = "/graphics/png/planets/planet" + planetNumber + ".png";
+        Image planetImage = new Image(getClass().getResourceAsStream(planetImagePath));
+        ImageView planetView = new ImageView(planetImage);
+
+        // Set the position of the planet
+        planetView.setLayoutX(planetX);
+        planetView.setLayoutY(planetY);
+
+        // Calculate the size of the planet based on the multiplier
+        double planetSize = PLANET_SIZE_MULTIPLIER * sizeMultiplier;
+
+        // Get the original dimensions of the planet image
+        double originalWidth = planetImage.getWidth();
+        double originalHeight = planetImage.getHeight();
+
+        // Calculate the ratio of the original dimensions
+        double aspectRatio = originalWidth / originalHeight;
+
+        // Calculate the new dimensions while maintaining the aspect ratio
+        double newWidth = Math.sqrt(planetSize * planetSize * aspectRatio);
+        double newHeight = newWidth / aspectRatio;
+
+        // Set the dimensions of the planet view
+        planetView.setFitWidth(newWidth);
+        planetView.setFitHeight(newHeight);
+
+        // Add event handler for clicking the planet
+        planetView.setOnMouseClicked(event -> {
+            System.out.println("Planet " + planetNumber + " clicked!");
+            String playerImagePath = "/graphics/png/player/FTL.gif";
+            playerController.changePlayerImage(playerImagePath);
+
+            PauseTransition pause = new PauseTransition(Duration.seconds(1.4));
+            String originImagePlayer = "/graphics/png/player/SpaceShip.gif";
+            pause.setOnFinished(e -> playerController.changePlayerImage(originImagePlayer));
+
+            playerController.currentPlanet = playerController.evaluateCurrentPlanet(planetNumber);
+
+            pause.play();
+            remove();
+            System.out.println(playerController.currentPlanet);
+        });
+
+        // Add the planet to the root and to the list of planet views
+        planetViews.add(planetView);
+        root.getChildren().add(planetView);
+
+        // Add the planet and its number to the planet number map
+        planetNumberMap.put(planetView, planetNumber);
     }
 
     public void remove() {
         root.getChildren().removeAll(backgroundView);
         root.getChildren().removeAll(planetViews);
+    }
+
+    public HashMap<ImageView, Integer> getPlanetNumberMap() {
+        return planetNumberMap;
     }
 }
