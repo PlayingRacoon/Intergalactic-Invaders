@@ -163,7 +163,7 @@ public class PlayerController {
         while (iterator.hasNext()) {
             Enemy enemy = iterator.next();
             ImageView enemyView = enemy.getImageView();
-            double newX = enemyView.getLayoutX() - 1;
+            double newX = enemyView.getLayoutX() - mainModule.enemySpeed;
             double newY = enemyView.getLayoutY();
 
             List<ImageView> enemyViews = spawner.getEnemyViews();
@@ -736,3 +736,4 @@ private Button shopButton;
         return pointCounter.count;
     }
 }
+

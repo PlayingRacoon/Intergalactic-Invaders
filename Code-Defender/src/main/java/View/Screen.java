@@ -59,7 +59,7 @@ public class Screen extends Application {
 
     @Override
     public void start(Stage mainStage) throws Exception {
-        mainStage.setTitle("Code Defender");
+        mainStage.setTitle("Intergalactic Invaders");
 
         // Set background image
         backgroundImage = new Image(getClass().getResourceAsStream("/graphics/png/backrounds/earth.png"));
