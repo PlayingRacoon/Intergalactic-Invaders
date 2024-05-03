@@ -28,7 +28,7 @@ public class Screen extends Application {
 
     }
 
-    public void setBackgroundImage(String imagePath) {
+    public void setBackgroundImage(String imagePath, PlayerController pc) {
 
             root.getChildren().remove(backgroundView);
             root.getChildren().remove(backgroundImage);
@@ -54,7 +54,7 @@ public class Screen extends Application {
         backgroundView = newBackgroundView; // Update the reference to the background
 
 
-        backgroundView.toFront();
+        //backgroundView.toFront();
     }
 
     @Override

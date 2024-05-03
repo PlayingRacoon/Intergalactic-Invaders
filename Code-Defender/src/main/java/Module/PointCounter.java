@@ -34,6 +34,7 @@ public class PointCounter {
     }
 
     public void updateCounter() {
+        counterLabel.toFront();
         counterLabel.setText("Points: " + count);
     }
 

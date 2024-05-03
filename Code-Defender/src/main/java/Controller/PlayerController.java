@@ -47,7 +47,7 @@ public class PlayerController {
     private double sceneHeight;
     private Pane root;
     private Spawner spawner;
-    private PointCounter pointCounter;
+    public PointCounter pointCounter;
     private List<EnemyAttributes> enemyAttributesList;
     SpawnWave spawnWave = new SpawnWave();
 
@@ -108,7 +108,7 @@ public class PlayerController {
         mainModule.playerView.setLayoutY(240);
         mainModule.playerView.setLayoutX(2);
 
-        screen.setBackgroundImage("/graphics/png/backrounds/earth.png");
+        screen.setBackgroundImage("/graphics/png/backrounds/earth.png", this);
         PlayerTofront();
 
         AnimationTimer timer = new AnimationTimer() {
@@ -729,5 +729,10 @@ private Button shopButton;
             addView(sl);
         }
         System.out.println("size"+shop.getSlotViews().size());
+    }
+
+    public int getPoints()
+    {
+        return pointCounter.count;
     }
 }

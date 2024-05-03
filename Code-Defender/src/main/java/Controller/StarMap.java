@@ -108,11 +108,11 @@ public class StarMap {
                 playerController.changePlayerImage(originImagePlayer);
                 String tempBck = "/graphics/png/backrounds/" + playerController.currentPlanet + ".png";
 
-                screen.setBackgroundImage(tempBck);
+                screen.setBackgroundImage(tempBck, playerController);
                 playerController.PlayerTofront();
+                playerController.pointCounter.counterLabel.toFront();
             });
             playerController.evaluateCurrentPlanet(planetNumber);
-
 
             pause.play();
             remove();
