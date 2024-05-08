@@ -291,9 +291,11 @@ public class PlayerController {
         spawner.keepSpawning = false;
         currentPlanet = "earth";
         mainModule.curPlanet = currentPlanet;
-        //openShopFromTextFile(currentPlanet);
-        //shopCounter.setDisplayCounter(true);
-        openStarMap();
+
+        openShopFromTextFile(currentPlanet);
+        shopCounter.setDisplayCounter(true);
+        //openStarMap();
+
 
         if (pointCounter.count >= pointCounter.tempSavePointNumber + 5000 && openNext != null) {
             if (openNext.equals("shop")) {
@@ -556,6 +558,7 @@ private Button shopButton;
                             slotCount = Integer.parseInt(line.substring("/slots:".length()).trim());
 
                             // Call the callSlot method with the slot count
+                            checkPaidSlots(currentPlanet, slotCount);
                             callSlot(slotCount, outerShopImage);
                             break; // Stop reading after obtaining the slot count
                         }
@@ -601,13 +604,40 @@ private Button shopButton;
                 String img = "/graphics/png/shops/slots/" + currentPlanet + "/upgrade" + tempSlot + ".gif";
 
 
-
-                if (!slotAlreadyCreated(layoutX)) {
+                ArrayList temp = new ArrayList();
+                temp = unpaidSlots.get(currentPlanet);
+                if (!slotAlreadyCreated(layoutX) && !temp.contains(tempSlot)) {
                     openClassShop(pointCounter.count, layoutX, img, tempSlot, outerShopImage);
+                    layoutX += 95;
                 }
-                layoutX += 95;
+
             }
         }
+    }
+
+    public HashMap<String, ArrayList> unpaidSlots = new HashMap<String, ArrayList>();
+    public ArrayList<String> paidCheckDONEforPlanet = new ArrayList<String>();
+
+    private void checkPaidSlots(String curPla, int allSLOTS)
+    {
+        if (!paidCheckDONEforPlanet.contains(curPla)) {
+            unpaidFOR(allSLOTS, curPla);
+        }
+    }
+
+    private void unpaidFOR(int allSLOTS, String curPla)
+    {
+        int anzahlDERbezahlenden = random.nextInt(5) + 1;
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+
+        for (int i = 0; i < anzahlDERbezahlenden; i++) {
+            int everythingNeededTOpay = random.nextInt(allSLOTS-1) + 1;
+
+            temp.add(everythingNeededTOpay);
+        }
+
+        unpaidSlots.put(curPla, temp);
+
     }
     private boolean slotAlreadyCreated(int layoutX) {
         for (Node node : root.getChildren()) {
@@ -683,7 +713,7 @@ private Button shopButton;
             }
             break;
 
-            case "":
+            case "birmingham":
             break;
         }
         return temp;
