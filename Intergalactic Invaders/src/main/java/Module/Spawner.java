@@ -65,8 +65,7 @@ public class Spawner {
                     spawnEnemy();
                     lastSpawnTime = timestamp;
 
-                    if (spawnWave.chosenEnemy == 11 || spawnWave.chosenEnemy == 12)
-                    {
+                    if (spawnWave.chosenEnemy == 11 || spawnWave.chosenEnemy == 12) {
                         keepSpawning = false;
                     }
 
@@ -131,7 +130,7 @@ public class Spawner {
                 }
 
                 // Check if the enemy is of type "ranged" to allow shooting
-                if (enemyType.equals("ranged")) {
+                if (enemyType.equals("ranged") && !playerController.dead) {
                     if (!lastEnemyLaserFireTimes.containsKey(enemyView) || now - lastEnemyLaserFireTimes.get(enemyView) >= LASER_INTERVAL) {
                         createEnemyLaser(enemyView);
                         lastEnemyLaserFireTimes.put(enemyView, now); // Update the last laser shot time for this enemy
@@ -146,11 +145,10 @@ public class Spawner {
     }
 
 
-
     private void createEnemyLaser(ImageView enemyView) {
         ImageView laserView = new ImageView(new Image(getClass().getResourceAsStream(mainModule.laserImage)));
 
-        ArrayList<ImageView> enemyLaserViews=new ArrayList<>();
+        ArrayList<ImageView> enemyLaserViews = new ArrayList<>();
 
         // Set laser position to be in front of the enemy
         double laserX = enemyView.getLayoutX() - laserView.getImage().getWidth();
@@ -206,7 +204,7 @@ public class Spawner {
 
     public void spawnLaser() {
         long currentTime = System.nanoTime();
-        if(currentTime - lastLaserFireTime >= 500_000_000){
+        if (currentTime - lastLaserFireTime >= 500_000_000) {
             ImageView laserView = new ImageView(mainModule.laserView.getImage());
             double laserX = mainModule.playerView.getLayoutX() + 60; // Spawn laser on player
             double laserY = mainModule.playerView.getLayoutY() + 29;

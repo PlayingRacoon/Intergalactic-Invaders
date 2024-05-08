@@ -36,6 +36,8 @@ public class PlayerController {
     private boolean tempMovementS = true;
     private boolean tempMovementD = false;
 
+    public boolean dead =false;
+
     private ArrayList<Enemy> enemies = new ArrayList<>(); // ArrayList to hold Enemy objects
 
     private int movementVariable = 2; // Movement speed
@@ -62,6 +64,7 @@ public class PlayerController {
     public boolean shopOpen = false;
     Screen screen;
 
+    public int hitpoints=3;
 
     // Method to set the enemy attributes list
     public void setEnemyAttributesList(List<EnemyAttributes> enemyAttributesList) {
@@ -116,6 +119,9 @@ public class PlayerController {
             public void handle(long timestamp) {
                 movePlayer();
                 moveEnemies(); // Move all enemies
+                if (hitpoints < 1) {
+                    killplayer(); // Call your method here
+                }
             }
         };
         timer.start();
@@ -126,7 +132,6 @@ public class PlayerController {
         // Add listeners to scene width and height properties to update scene size
         primaryScene.widthProperty().addListener((obs, oldVal, newVal) -> updateSceneSize());
         primaryScene.heightProperty().addListener((obs, oldVal, newVal) -> updateSceneSize());
-
     }
 
     private void updateSceneSize() {
@@ -202,6 +207,8 @@ public class PlayerController {
                 int ENNumber;
                 ENNumber = spawner.enemyAttributesMap.get(enemyV).getEnemyNumber();
 
+                hitpoints=hitpoints-5;
+                System.out.println(hitpoints);
 
                 try {
                     kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
@@ -378,6 +385,7 @@ public class PlayerController {
 
     public void killAllEnemies() {
         kal = true;
+
     }
 
 
@@ -616,7 +624,7 @@ private Button shopButton;
 
         primaryScene.setOnKeyPressed(a -> {
             KeyCode code = a.getCode();
-            if (a.getCode().toString().equals("SPACE")) {
+            if (a.getCode().toString().equals("SPACE")&&!dead) {
                 spawner.spawnLaser();
                 a.consume();
             }
@@ -734,6 +742,20 @@ private Button shopButton;
     public int getPoints()
     {
         return pointCounter.count;
+    }
+
+    private void killplayer() {
+        System.out.println("player is kil");
+        killAllEnemies();
+        dead=true;
+        endGame();
+        //call method to put player in main menu
+    }
+
+    // Deletes player and sends them to the main menu
+    public void endGame() {
+        root.getChildren().remove(mainModule.playerView);
+        // Add code to transition to the main menu
     }
 }
 
