@@ -178,7 +178,7 @@ public class Spawner {
                 laserView.setLayoutX(newX);
 
                 // Check if the laser touches or crosses the delete boundary
-                if (laserView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
+                if (laserView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent()) || playerController.kal) {
                     delete(laserViews, laserView);
                 }
             }

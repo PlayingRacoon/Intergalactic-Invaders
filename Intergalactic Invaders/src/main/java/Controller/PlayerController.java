@@ -54,7 +54,7 @@ public class PlayerController {
     SpawnWave spawnWave = new SpawnWave();
 
     private Stage primaryStage;
-    boolean kal = false;
+    public boolean kal = false;
 
     private int bossKilled = 0;
     private Map<ImageView, EnemyAttributes> enemyAttributesMap;
