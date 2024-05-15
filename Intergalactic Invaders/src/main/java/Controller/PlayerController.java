@@ -55,6 +55,7 @@ public class PlayerController {
 
     private Stage primaryStage;
     public boolean kal = false;
+    public boolean kalp;
 
     private int bossKilled = 0;
     private Map<ImageView, EnemyAttributes> enemyAttributesMap;
@@ -117,6 +118,7 @@ public class PlayerController {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long timestamp) {
+                collisionsCheckEnemyLaser();
                 movePlayer();
                 moveEnemies(); // Move all enemies
                 if (hitpoints < 1) {
@@ -189,8 +191,6 @@ public class PlayerController {
             // Check for collisions
             collisionsCheck(enemyViews, enemyView, iterator);
 
-            // Now you have access to all attributes of the current enemy, you can perform any additional actions here
-
             collisionsCheckLaser(enemyViews, enemyView, iterator);
         }
     }
@@ -202,7 +202,7 @@ public class PlayerController {
         for (ImageView enemyV : enemyViews) {
 
             // Check for collision only if the player's bounds intersect with the enemy's bounds
-            if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent()) || kal) {
+            if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent()) || kalp) {
 
                 int ENNumber;
                 ENNumber = spawner.enemyAttributesMap.get(enemyV).getEnemyNumber();
@@ -254,6 +254,21 @@ public class PlayerController {
             }
         }
     }
+    public void collisionsCheckEnemyLaser() {
+        List<ImageView> enemylasers = spawner.getEnemyLaserViews();
+        Iterator<ImageView> iterator = enemylasers.iterator();
+        while (iterator.hasNext()) {
+            ImageView laserV = iterator.next();
+            if (laserV.getBoundsInParent().intersects(mainModule.playerView.getBoundsInParent())) {
+                System.out.println("player collided with a laser!");
+                hitpoints--;
+                System.out.println(hitpoints);
+                iterator.remove();
+                root.getChildren().remove(laserV);
+            }
+        }
+    }
+
 
 
     public void addPointsPerDefeat(int ENumber) {
@@ -776,9 +791,9 @@ private Button shopButton;
 
     private void killplayer() {
         System.out.println("player is kil");
-        killAllEnemies();
         dead=true;
         endGame();
+        kalp=true;
         //call method to put player in main menu
     }
 

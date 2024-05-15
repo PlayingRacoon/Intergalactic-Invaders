@@ -144,11 +144,10 @@ public class Spawner {
         lastEnemyLaserFireTimes.put(enemyView, System.nanoTime());
     }
 
+    ArrayList<ImageView> enemyLaserViews = new ArrayList<>();
 
     private void createEnemyLaser(ImageView enemyView) {
         ImageView laserView = new ImageView(new Image(getClass().getResourceAsStream(mainModule.laserImage)));
-
-        ArrayList<ImageView> enemyLaserViews = new ArrayList<>();
 
         // Set laser position to be in front of the enemy
         double laserX = enemyView.getLayoutX() - laserView.getImage().getWidth();
@@ -251,5 +250,9 @@ public class Spawner {
 
     public List<ImageView> getLaserViews() {
         return laserViews;
+    }
+
+    public ArrayList<ImageView> getEnemyLaserViews() {
+        return enemyLaserViews;
     }
 }
