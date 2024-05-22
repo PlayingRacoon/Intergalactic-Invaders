@@ -130,8 +130,8 @@ public class Spawner {
                 }
 
                 // Check if the enemy is of type "ranged" to allow shooting
-                if (enemyType.equals("ranged") && !playerController.dead) {
-                    if (!lastEnemyLaserFireTimes.containsKey(enemyView) || now - lastEnemyLaserFireTimes.get(enemyView) >= LASER_INTERVAL) {
+                if (enemyType.equals("ranged") && !playerController.dead && enemyViews.contains(enemyView)){
+                    if (!lastEnemyLaserFireTimes.containsKey(enemyView) || now - lastEnemyLaserFireTimes.get(enemyView) >= LASER_INTERVAL*2) {
                         createEnemyLaser(enemyView);
                         lastEnemyLaserFireTimes.put(enemyView, now); // Update the last laser shot time for this enemy
                     }
@@ -147,7 +147,7 @@ public class Spawner {
     ArrayList<ImageView> enemyLaserViews = new ArrayList<>();
 
     private void createEnemyLaser(ImageView enemyView) {
-        ImageView laserView = new ImageView(new Image(getClass().getResourceAsStream(mainModule.laserImage)));
+        ImageView laserView = new ImageView(new Image(getClass().getResourceAsStream("/graphics/png/enemies/" + mainModule.curPlanet +"/" + "laser(enemy).gif")));
 
         // Set laser position to be in front of the enemy
         double laserX = enemyView.getLayoutX() - laserView.getImage().getWidth();

@@ -26,6 +26,8 @@ import java.io.*;
 import java.util.*;
 
 public class PlayerController {
+    public boolean playerLaser=false;
+
     private boolean wPressed = false;
     private boolean sPressed = false;
     private boolean aPressed = false;
@@ -304,13 +306,15 @@ public class PlayerController {
 
         }
 
-        killAllEnemies();
-        spawner.keepSpawning = false;
-        currentPlanet = "earth";
-        mainModule.curPlanet = currentPlanet;
+        //DEV TEST OPTIONS
 
-        openShopFromTextFile(currentPlanet);
-        shopCounter.setDisplayCounter(true);
+        //killAllEnemies();
+        //spawner.keepSpawning = false;
+        //currentPlanet = "earth";
+        //mainModule.curPlanet = currentPlanet;
+
+        //openShopFromTextFile(currentPlanet);
+        //shopCounter.setDisplayCounter(true);
         //openStarMap();
 
 
@@ -672,8 +676,10 @@ private Button shopButton;
         primaryScene.setOnKeyPressed(a -> {
             KeyCode code = a.getCode();
             if (a.getCode().toString().equals("SPACE")&&!dead) {
+                playerLaser=true;
                 spawner.spawnLaser();
                 a.consume();
+                playerLaser=false;
             }
             if (code == KeyCode.W) wPressed = true;
             else if (code == KeyCode.S) sPressed = true;
