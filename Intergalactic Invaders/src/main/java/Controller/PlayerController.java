@@ -202,13 +202,15 @@ public class PlayerController {
         for (ImageView enemyV : enemyViews) {
 
             // Check for collision only if the player's bounds intersect with the enemy's bounds
-            if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent()) || kalp) {
+            if (mainModule.playerView.getBoundsInParent().intersects(enemyV.getBoundsInParent()) || kalp || kal ){
 
                 int ENNumber;
                 ENNumber = spawner.enemyAttributesMap.get(enemyV).getEnemyNumber();
 
-                hitpoints=hitpoints-5;
-                System.out.println(hitpoints);
+                if (kalp) {
+                    hitpoints = hitpoints - 5;
+                    System.out.println(hitpoints);
+                }
 
                 try {
                     kill(enemyViews, enemyView, iterator, enemyV, ENNumber);
