@@ -728,10 +728,15 @@ private Button shopButton;
             switch (slotNumber) {
                 case 1:
                     temp = "hull_upgrade";
+                    hitpoints=hitpoints+1;
                     break;
 
                 case 2:
                     temp = "thruster_upgrade";
+                    tempMovementW=true;
+                    tempMovementA=true;
+                    tempMovementS=true;
+                    tempMovementD=true;
                     break;
 
                 case 3:
