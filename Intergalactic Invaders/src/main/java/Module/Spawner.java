@@ -127,6 +127,7 @@ public class Spawner {
                 // Check if the enemy touches or crosses the delete boundary
                 if (enemyView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
                     delete(enemyViews, enemyView);
+                    playerController.hitpoints=playerController.hitpoints-3;
                 }
 
                 // Check if the enemy is of type "ranged" to allow shooting
