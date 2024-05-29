@@ -273,7 +273,7 @@ public class PlayerController {
         }
     }
 
-    int nextLevel =1000;
+    int nextLevel =500;
 
     public void addPointsPerDefeat(int ENumber) {
 
@@ -336,6 +336,7 @@ public class PlayerController {
                 //spawnWave.bossChosen  = 12; mach enemy 1mal zum 12er boss
                 //spawnWave.wave = 1;
                 kal=true;
+                openNext="shop";
                 spawner.keepSpawning=false;
                 openStarMap();
             }
@@ -345,6 +346,7 @@ public class PlayerController {
     }
 
     private void openStarMap() {
+        kal=true;
         StarMap starMap = new StarMap(root, sceneWidth, sceneHeight, this, screen); // i love that, THIS!
         kal=false;
         // You might want to keep a reference to the StarMap object if you need to remove it later
@@ -362,6 +364,8 @@ public class PlayerController {
     public void evaluateCurrentPlanet(int PlanetNumber)
     {
         String temp = " ";
+
+        spawner.keepSpawning=true;
 
         switch (PlanetNumber)
         {
@@ -826,6 +830,7 @@ private Button shopButton;
     private void killplayer() {
         System.out.println("player is kil");
         dead=true;
+        spawner.keepSpawning=false;
         endGame();
         kalp=true;
         //call method to put player in main menu
