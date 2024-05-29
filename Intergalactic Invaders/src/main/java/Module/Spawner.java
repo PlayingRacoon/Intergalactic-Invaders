@@ -81,9 +81,9 @@ public class Spawner {
 
     private Map<ImageView, Long> lastEnemyLaserFireTimes = new HashMap<>();
     private final long LASER_INTERVAL = 1_500_000_000; // 1.5 seconds in nanoseconds
-
+public int bossChosenFürWave = 0;
     public void spawnEnemy() {
-        spawnWave.spawnChoosenEnemy();
+        spawnWave.spawnChoosenEnemy(bossChosenFürWave, this, playerController);
         mainModule.loadEnemyAttributes(spawnWave.chosenEnemy);
         ImageView enemyView = new ImageView();
 

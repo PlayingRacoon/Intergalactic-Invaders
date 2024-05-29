@@ -9,22 +9,24 @@ public class SpawnWave {
     Random ran = new Random();
 
     public int bossChosen;
-
     public int wave = 1;
 
-    public void spawnChoosenEnemy() {
+    public void spawnChoosenEnemy(int bossEnemy, Spawner spawner, PlayerController playerController) {
+
 
         if (wave == 1)
         {
-            if (bossChosen != 0){
-            chosenEnemy = bossChosen;
-            bossChosen = 0;
-            System.out.println("sjbfbdsgdsgbfgfgfdjgkjfd "+chosenEnemy);
-        }
+            System.out.println("boss "+ bossEnemy);
 
             chosenEnemy = ran.nextInt(5) + 1;
             System.out.println("chosenEnemy "+ chosenEnemy);
 
+            if(bossEnemy == 11){
+                chosenEnemy = bossEnemy;
+                bossChosen = 0;
+                playerController.kal = false;
+                spawner.keepSpawning = false;
+            }
         } else if (wave == 2) {
             chosenEnemy = ran.nextInt(10) + 5;
         }
