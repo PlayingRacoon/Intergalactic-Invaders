@@ -65,9 +65,9 @@ public class Spawner {
                     spawnEnemy();
                     lastSpawnTime = timestamp;
 
-                    if (spawnWave.chosenEnemy == 11 || spawnWave.chosenEnemy == 12) {
-                        keepSpawning = false;
-                    }
+//                    if (spawnWave.chosenEnemy == 11 || spawnWave.chosenEnemy == 12) {
+//                        keepSpawning = false;
+//                    }
 
                     if (delay <= 250_000_000) {
                         delay -= 5_000_000; //delay until the next enemy spawns (spawn time gets faster)
@@ -82,8 +82,7 @@ public class Spawner {
     private Map<ImageView, Long> lastEnemyLaserFireTimes = new HashMap<>();
     private final long LASER_INTERVAL = 1_500_000_000; // 1.5 seconds in nanoseconds
 
-    private void spawnEnemy() {
-        // Create a new ImageView for the enemy
+    public void spawnEnemy() {
         spawnWave.spawnChoosenEnemy();
         mainModule.loadEnemyAttributes(spawnWave.chosenEnemy);
         ImageView enemyView = new ImageView();
@@ -126,13 +125,12 @@ public class Spawner {
 
                 // Check if the enemy touches or crosses the delete boundary
                 if (enemyView.getBoundsInParent().intersects(deleteBoundary.getBoundsInParent())) {
-                    delete(enemyViews, enemyView);
-                    playerController.hitpoints=playerController.hitpoints-3;
+                    deleteEnemy(enemyView);
                 }
 
                 // Check if the enemy is of type "ranged" to allow shooting
-                if (enemyType.equals("ranged") && !playerController.dead && enemyViews.contains(enemyView)){
-                    if (!lastEnemyLaserFireTimes.containsKey(enemyView) || now - lastEnemyLaserFireTimes.get(enemyView) >= LASER_INTERVAL*2) {
+                if (enemyType.equals("ranged") && !playerController.dead && enemyViews.contains(enemyView)) {
+                    if (!lastEnemyLaserFireTimes.containsKey(enemyView) || now - lastEnemyLaserFireTimes.get(enemyView) >= LASER_INTERVAL * 2) {
                         createEnemyLaser(enemyView);
                         lastEnemyLaserFireTimes.put(enemyView, now); // Update the last laser shot time for this enemy
                     }
@@ -144,6 +142,7 @@ public class Spawner {
         // Initialize the last laser shot time for this enemy
         lastEnemyLaserFireTimes.put(enemyView, System.nanoTime());
     }
+
 
     ArrayList<ImageView> enemyLaserViews = new ArrayList<>();
 
@@ -255,5 +254,10 @@ public class Spawner {
 
     public ArrayList<ImageView> getEnemyLaserViews() {
         return enemyLaserViews;
+    }
+
+    private void deleteEnemy(ImageView enemyView) {
+        root.getChildren().remove(enemyView);
+        enemyViews.remove(enemyView);
     }
 }

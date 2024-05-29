@@ -317,19 +317,18 @@ public class PlayerController {
         //shopCounter.setDisplayCounter(true);
         //openStarMap();
 
-//5000 points
-        if (pointCounter.count >= pointCounter.tempSavePointNumber + 500 && openNext != null) {
+//5000 pointsInfo
+        if (pointCounter.count >= pointCounter.tempSavePointNumber + 50 && openNext != null) {
             if (openNext.equals("shop")) {
                 killAllEnemies();
-                spawner.keepSpawning = false;
-                killAllEnemies();
-                spawner.keepSpawning = false;
                 currentPlanet = "earth";
                 mainModule.curPlanet = currentPlanet;
-                //chosenEnemy = 11; mach enemy 1mal zum 11er boss
-                spawnWave.wave = 2;
+                spawnWave.bossChosen = 11; //mach enemy 1mal zum 11er boss
+
+                spawner.keepSpawning = false;
+              //  spawnWave.wave = 2;
             } else if (openNext.equals("navigation")) {
-                //chosenEnemy = 12; mach enemy 1mal zum 12er boss
+                //spawnWave.bossChosen  = 12; mach enemy 1mal zum 12er boss
                 //spawnWave.wave = 1;
             }
             pointCounter.tempSavePointNumber = pointCounter.count;
@@ -779,7 +778,7 @@ private Button shopButton;
         // Add event handling to the slot ImageView
         slotView.setOnMouseClicked(e -> {
 
-            System.out.println(identifyShopItem(slotNumber));
+            System.out.println("slotnumber"+identifyShopItem(slotNumber));
 
             //calls clicked shop to delete it
             root.getChildren().removeAll(shop.getSlotViews());
