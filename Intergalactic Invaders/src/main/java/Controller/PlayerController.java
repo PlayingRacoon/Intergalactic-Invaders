@@ -317,13 +317,17 @@ public class PlayerController {
         //shopCounter.setDisplayCounter(true);
         //openStarMap();
 
-
-        if (pointCounter.count >= pointCounter.tempSavePointNumber + 5000 && openNext != null) {
+//5000 points
+        if (pointCounter.count >= pointCounter.tempSavePointNumber + 500 && openNext != null) {
             if (openNext.equals("shop")) {
                 killAllEnemies();
                 spawner.keepSpawning = false;
+                killAllEnemies();
+                spawner.keepSpawning = false;
+                currentPlanet = "earth";
+                mainModule.curPlanet = currentPlanet;
                 //chosenEnemy = 11; mach enemy 1mal zum 11er boss
-                //spawnWave.wave = 2;
+                spawnWave.wave = 2;
             } else if (openNext.equals("navigation")) {
                 //chosenEnemy = 12; mach enemy 1mal zum 12er boss
                 //spawnWave.wave = 1;

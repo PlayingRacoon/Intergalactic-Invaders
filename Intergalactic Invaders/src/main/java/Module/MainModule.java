@@ -106,6 +106,8 @@ public class MainModule {
             if (allEnemiesData.containsKey(chosenEnemy)) {
                 Map<String, String> chosenEnemyData = allEnemiesData.get(chosenEnemy);
                 enemyImage = "/graphics/png/enemies/"+ curPlanet +"/"+ chosenEnemyData.getOrDefault("/image", "");
+                System.out.println(enemyImage);
+                System.out.println(curPlanet);
                 enemyType = chosenEnemyData.getOrDefault("/type", "");
                 enemySpeed = Double.parseDouble(chosenEnemyData.getOrDefault("/speed", "0.0"));
                 enemyDamage = Integer.parseInt(chosenEnemyData.getOrDefault("/damage", "0"));

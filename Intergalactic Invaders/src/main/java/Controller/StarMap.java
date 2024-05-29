@@ -22,6 +22,8 @@ public class StarMap {
     private final double PLANET_SIZE_MULTIPLIER = 50; // Adjust this multiplier as needed
     Screen screen;
 
+    public String currentPlanetAfterFTLjump = " ";
+
 
     private PlayerController playerController;
 
@@ -99,6 +101,7 @@ public class StarMap {
         planetView.setOnMouseClicked(event -> {
 
             System.out.println("Planet " + planetNumber + " clicked!");
+
             String playerImagePath = "/graphics/png/player/FTL.gif";
             playerController.changePlayerImage(playerImagePath);
 
