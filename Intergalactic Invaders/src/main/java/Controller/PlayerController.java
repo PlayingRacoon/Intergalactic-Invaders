@@ -273,7 +273,7 @@ public class PlayerController {
         }
     }
 
-
+    int nextLevel =1000;
 
     public void addPointsPerDefeat(int ENumber) {
 
@@ -318,7 +318,7 @@ public class PlayerController {
         //openStarMap();
 
 //5000 pointsInfo
-        if (pointCounter.count >= pointCounter.tempSavePointNumber + 1000 && openNext != null) {
+        if (pointCounter.count >= pointCounter.tempSavePointNumber + nextLevel && openNext != null && !dead) {
             if (openNext.equals("shop")) {
                 killAllEnemies();
                 currentPlanet = "earth";
@@ -329,10 +329,14 @@ public class PlayerController {
                 shopCounter.setDisplayCounter(true);
 
                 spawner.keepSpawning = false;
+                nextLevel=nextLevel*2;
               //  spawnWave.wave = 2;
+                openNext="navigation";
             } else if (openNext.equals("navigation")) {
                 //spawnWave.bossChosen  = 12; mach enemy 1mal zum 12er boss
                 //spawnWave.wave = 1;
+                kal=true;
+                spawner.keepSpawning=false;
                 openStarMap();
             }
             pointCounter.tempSavePointNumber = pointCounter.count;
@@ -342,6 +346,7 @@ public class PlayerController {
 
     private void openStarMap() {
         StarMap starMap = new StarMap(root, sceneWidth, sceneHeight, this, screen); // i love that, THIS!
+        kal=false;
         // You might want to keep a reference to the StarMap object if you need to remove it later
         // e.g., this.starMap = starMap;
     }
