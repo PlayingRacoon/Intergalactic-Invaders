@@ -318,18 +318,22 @@ public class PlayerController {
         //openStarMap();
 
 //5000 pointsInfo
-        if (pointCounter.count >= pointCounter.tempSavePointNumber + 50 && openNext != null) {
+        if (pointCounter.count >= pointCounter.tempSavePointNumber + 1000 && openNext != null) {
             if (openNext.equals("shop")) {
                 killAllEnemies();
                 currentPlanet = "earth";
                 mainModule.curPlanet = currentPlanet;
-                spawnWave.bossChosen = 11; //mach enemy 1mal zum 11er boss
+                //spawnWave.bossChosen = 11; //mach enemy 1mal zum 11er boss
+
+                openShopFromTextFile(currentPlanet);
+                shopCounter.setDisplayCounter(true);
 
                 spawner.keepSpawning = false;
               //  spawnWave.wave = 2;
             } else if (openNext.equals("navigation")) {
                 //spawnWave.bossChosen  = 12; mach enemy 1mal zum 12er boss
                 //spawnWave.wave = 1;
+                openStarMap();
             }
             pointCounter.tempSavePointNumber = pointCounter.count;
         }
@@ -426,6 +430,8 @@ public class PlayerController {
             openShop();
 
             kal = false;
+            dead=false;
+            kalp=false;
             spawner.keepSpawning = true;
             openNext = "navigation";
             //get to spawnWave after
@@ -433,6 +439,8 @@ public class PlayerController {
         } else if (ENNumber == 12) {
 
             kal = false;
+            dead=false;
+            kalp=false;
             spawner.keepSpawning = true;
             openNext = "shop";
 
@@ -513,6 +521,11 @@ private Button shopButton;
         shopButton.setOnAction(e -> {
             System.out.println("Button clicked!");
             root.getChildren().remove(shopButton);
+
+            kal=false;
+            kalp=false;
+            dead=false;
+            spawner.keepSpawning=true;
 
             root.getChildren().remove(outerShopView);
             shopCounter.setDisplayCounter(false);
